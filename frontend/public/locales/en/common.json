@@ -1,0 +1,285 @@
+{
+  "app": {
+    "name": "Vallentin Claims",
+    "tagline": "Healthcare complaint management platform"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "login": "Log In",
+    "register": "Register",
+    "logout": "Log Out",
+    "myComplaints": "My Complaints",
+    "admin": "Admin",
+    "submit": "Submit Complaint"
+  },
+  "actions": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "back": "Back",
+    "next": "Next",
+    "loading": "Loading...",
+    "edit": "Edit"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "notFound": "Page not found.",
+    "notFoundDesc": "The page you are looking for does not exist.",
+    "unauthorized": "You must be logged in to access this page.",
+    "forbidden": "You do not have permission to access this resource."
+  },
+  "auth": {
+    "email": "Email",
+    "name": "Full name",
+    "password": "Password",
+    "passwordConfirmation": "Confirm password",
+    "newPassword": "New password",
+    "passwordHint": "Min 8 chars with uppercase, lowercase, digit and special character",
+    "createAccount": "Create an account",
+    "registerAction": "Create account",
+    "alreadyHaveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?",
+    "agreeTerms": "I accept the",
+    "and": "and",
+    "marketing": "Send me product updates and news (optional)",
+    "forgotPassword": "Forgot your password?",
+    "forgotDesc": "Enter your email and we will send a reset link.",
+    "forgotSent": "If that email exists, a reset link has been sent.",
+    "sendResetLink": "Send reset link",
+    "resetPassword": "Reset password",
+    "invalidCredentials": "Invalid email or password.",
+    "emailInUse": "This email is already registered.",
+    "captchaRequired": "Please complete the CAPTCHA.",
+    "orContinueWith": "or continue with",
+    "checkEmail": "Check your email",
+    "verifyEmailSent": "We sent a verification link to your email address. Please click it to activate your account.",
+    "didntReceive": "Didn't receive it?",
+    "resend": "Resend",
+    "resentSuccess": "Resent! Check your inbox.",
+    "emailVerified": "Email verified",
+    "emailVerifiedDesc": "Your account is now active. You can log in.",
+    "verifyFailed": "Verification failed",
+    "verifyFailedDesc": "The link is invalid or has expired.",
+    "passwordResetSuccess": "Password reset successfully. Please log in.",
+    "oauthError": "OAuth sign-in failed. Please try again.",
+    "oauthProcessing": "Completing sign-in..."
+  },
+  "complaint": {
+    "category": "Category",
+    "selectCategory": "Select a category",
+    "institution": "Institution",
+    "selectInstitution": "Select institution",
+    "institutionFreeTextPlaceholder": "Enter institution name",
+    "switchToDropdown": "Select from list",
+    "switchToFreeText": "Type institution name",
+    "title": "Title",
+    "titlePlaceholder": "Brief summary of your complaint",
+    "body": "Description",
+    "bodyPlaceholder": "Describe your complaint in detail",
+    "bodyHint": "Minimum {{min}} characters",
+    "minChars": "chars minimum",
+    "urgent": "This is urgent",
+    "contactOptional": "Contact details (optional)",
+    "contactName": "Your name",
+    "contactNamePlaceholder": "Jane Doe",
+    "contactEmail": "Email for confirmation copy",
+    "attachments": "Attachments",
+    "submitTitle": "Submit a complaint",
+    "submitDesc": "Fill in the form below. Anonymous submissions are reviewed before forwarding; registered users are forwarded immediately.",
+    "noComplaints": "No complaints yet",
+    "noComplaintsDesc": "Submit your first complaint using the button above.",
+    "publicId": "Complaint ID",
+    "status": "Status",
+    "submitted": "Submitted",
+    "type": "Submission type",
+    "details": "Complaint details",
+    "notFound": "Complaint not found or you do not have access. Sign in to track your submissions.",
+    "submitted.title": "Complaint submitted",
+    "submitted.anonymous": "Your complaint is pending admin review before being forwarded to the institution.",
+    "submitted.authorized": "Your complaint has been received and forwarded to the institution immediately.",
+    "submitted.track": "Track complaint",
+    "submitted.another": "Submit another"
+  },
+  "status": {
+    "submitted": "Submitted",
+    "pending_review": "Pending review",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "forwarded": "Forwarded",
+    "closed": "Closed"
+  },
+  "category": {
+    "hospitals": "Hospitals",
+    "doctors": "Doctors",
+    "insurance_funds": "Health Insurance Funds"
+  },
+  "home": {
+    "hero": {
+      "title": "Healthcare Complaint Platform",
+      "subtitle": "Submit complaints against hospitals, doctors, and health insurance funds. Your complaint is forwarded to the relevant institution and the Ombudsman."
+    },
+    "cta": {
+      "submit": "Submit a complaint"
+    },
+    "track": {
+      "placeholder": "Track complaint: VLC-2026-000123",
+      "label": "Complaint ID",
+      "action": "Track"
+    },
+    "stats": {
+      "title": "Platform overview"
+    },
+    "howItWorks": {
+      "title": "How it works"
+    },
+    "step1": {
+      "title": "Submit",
+      "desc": "Fill in the complaint form with details about the healthcare provider."
+    },
+    "step2": {
+      "title": "Review",
+      "desc": "Anonymous complaints are reviewed by an administrator before forwarding."
+    },
+    "step3": {
+      "title": "Forward",
+      "desc": "Your complaint is sent to the institution and a copy to the Ombudsman."
+    }
+  },
+  "about": {
+    "title": "About Vallentin Claims",
+    "p1": "Vallentin Claims is a web-based platform that allows citizens to submit complaints against healthcare institutions — hospitals, doctors, and health insurance funds.",
+    "p2": "Complaints submitted by registered users are forwarded immediately to the relevant institution and a copy is sent to the Ombudsman. Anonymous submissions are reviewed by an administrator first.",
+    "p3": "The platform is designed with privacy and security in mind. Personal data is handled in accordance with GDPR.",
+    "contact": "Contact",
+    "contactText": "For questions or assistance, please reach out via the complaint tracking system."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "section1": {
+      "title": "Data we collect",
+      "body": "We collect your email address and name when you register. For complaint submissions, we may collect contact details you provide voluntarily. We also retain your IP address for abuse prevention."
+    },
+    "section2": {
+      "title": "How we use your data",
+      "body": "Your data is used to process your complaint, notify you of its status, and forward it to the relevant institution. We do not sell your personal data."
+    },
+    "section3": {
+      "title": "Your rights (GDPR)",
+      "body": "You have the right to access, rectify, or erase your personal data. Contact an administrator to exercise these rights."
+    },
+    "section4": {
+      "title": "Data retention",
+      "body": "Complaint records are retained for a minimum period required by law. Account data may be erased on request, subject to legal obligations."
+    },
+    "version": "Version 1.0 — May 2026"
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "section1": {
+      "title": "Acceptable use",
+      "body": "You may use this platform to submit genuine complaints related to healthcare services. You must not submit false, abusive, or spam content."
+    },
+    "section2": {
+      "title": "Account responsibility",
+      "body": "You are responsible for maintaining the confidentiality of your account credentials. Notify us immediately of any unauthorized access."
+    },
+    "section3": {
+      "title": "Disclaimer",
+      "body": "This platform facilitates routing of complaints. We do not guarantee any particular outcome. Institutional responses depend on the respective institution."
+    },
+    "section4": {
+      "title": "Modification",
+      "body": "We may update these terms at any time. Continued use after an update constitutes acceptance of the new terms."
+    },
+    "version": "Version 1.0 — May 2026"
+  },
+  "track": {
+    "title": "Track a complaint",
+    "placeholder": "Enter complaint ID (e.g. VLC-2026-000123)",
+    "inputLabel": "Complaint ID",
+    "action": "Track",
+    "notFound": "Complaint not found or you do not have access. Sign in to track your submissions."
+  },
+  "stats": {
+    "totalComplaints": "Total complaints",
+    "forwarded": "Forwarded to institutions",
+    "urgent": "Marked urgent",
+    "normal": "Normal",
+    "byCategory": "By category",
+    "byStatus": "By status",
+    "monthly": "Monthly trend",
+    "byInstitution": "Top institutions",
+    "bySubmissionType": "By submission type"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "viewComplaints": "View complaints",
+    "search": "Search complaints...",
+    "searchAction": "Search",
+    "clearSearch": "Clear",
+    "allStatuses": "All statuses",
+    "allCategories": "All categories",
+    "allUrgency": "All urgency",
+    "allRoles": "All roles",
+    "notUrgent": "Not urgent",
+    "view": "View",
+    "actions": "Actions",
+    "role": "Role",
+    "status": "Status",
+    "active": "Active",
+    "from": "From",
+    "to": "To",
+    "noComplaints": "No complaints found",
+    "noUsers": "No users found",
+    "noInstitutions": "No institutions yet",
+    "approve": "Approve",
+    "reject": "Reject",
+    "close": "Close",
+    "rejectComplaint": "Reject complaint",
+    "rejectReason": "Reason (required)",
+    "timeline": "Timeline",
+    "approved": "Complaint approved",
+    "rejected": "Complaint rejected",
+    "closed": "Complaint closed",
+    "userUpdated": "User updated",
+    "anonymized": "User anonymized (GDPR)",
+    "anonymize": "Anonymize",
+    "anonymizeConfirmTitle": "Anonymize user (GDPR)",
+    "anonymizeConfirmBody": "This will permanently replace all personal data for {{email}} with anonymous placeholders. Complaint records will be retained. This action cannot be undone.",
+    "addInstitution": "Add institution",
+    "editInstitution": "Edit institution",
+    "deleteInstitution": "Deactivate institution",
+    "deleteInstitutionBody": "Deactivate {{name}}? It will no longer appear in dropdowns.",
+    "institutionCreated": "Institution created",
+    "institutionUpdated": "Institution updated",
+    "institutionDeleted": "Institution deactivated",
+    "nav": {
+      "dashboard": "Dashboard",
+      "complaints": "Complaints",
+      "users": "Users",
+      "institutions": "Institutions",
+      "statistics": "Statistics"
+    }
+  },
+  "role": {
+    "admin": "Admin",
+    "user": "User"
+  },
+  "dropzone": {
+    "label": "Upload attachments",
+    "hint": "Drag and drop or click to upload. Max {{max}} files, {{size}} total.",
+    "tooManyFiles": "Maximum {{max}} files allowed.",
+    "unsupportedType": "File type not supported: {{name}}",
+    "sizeExceeded": "Total size exceeds {{max}}.",
+    "remove": "Remove {{name}}",
+    "tally": "{{count}}/{{max}} files · {{size}} / {{maxSize}}"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  }
+}

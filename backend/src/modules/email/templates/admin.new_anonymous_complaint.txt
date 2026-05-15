@@ -1,0 +1,12 @@
+New Anonymous Complaint Requires Review — {{publicId}}
+
+An anonymous complaint has been submitted and is awaiting your review.
+
+Reference: {{publicId}}
+Category: {{categoryName}}
+Title: {{title}}
+Submitted: {{submittedAt}}
+
+Review in Admin Panel: {{adminUrl}}
+
+— Vallentin Claims Platform

@@ -1,0 +1,35 @@
+{
+  "app": {
+    "name": "Vallentin Claims",
+    "tagline": "Healthcare complaint management platform"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "login": "Log In",
+    "register": "Register",
+    "logout": "Log Out",
+    "myComplaints": "My Complaints",
+    "admin": "Admin",
+    "submit": "Submit Complaint"
+  },
+  "actions": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "back": "Back",
+    "next": "Next",
+    "loading": "Loading...",
+    "edit": "Edit"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "notFound": "Page not found.",
+    "notFoundDesc": "The page you are looking for does not exist.",
+    "unauthorized": "You must be logged in to access this page.",
+    "forbidden": "You do not have permission to access this resource."
+  }
+}

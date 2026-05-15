@@ -1,0 +1,17 @@
+Complaint Forwarded — {{publicId}}
+
+Dear Healthcare Ombudsman,
+
+The following complaint has been forwarded to the relevant institution and is provided to you as required copy.
+
+Reference: {{publicId}}
+Category: {{categoryName}}
+Institution: {{institutionName}}
+Title: {{title}}
+Urgent: {{#if urgent}}Yes{{else}}No{{/if}}
+Submitted: {{submittedAt}}
+
+Details:
+{{body}}
+
+— Vallentin Claims Platform

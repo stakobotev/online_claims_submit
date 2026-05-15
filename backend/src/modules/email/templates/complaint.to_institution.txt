@@ -1,0 +1,18 @@
+Complaint Received — {{publicId}}
+
+Dear {{institutionName}},
+
+A complaint has been submitted against your institution via the Vallentin Claims platform.
+
+Reference: {{publicId}}
+Category: {{categoryName}}
+Title: {{title}}
+Urgent: {{#if urgent}}Yes{{else}}No{{/if}}
+Submitted: {{submittedAt}}
+
+Details:
+{{body}}
+
+Please review and respond to this complaint within the statutory timeframe. A copy of this complaint has also been forwarded to the Healthcare Ombudsman.
+
+— Vallentin Claims Platform

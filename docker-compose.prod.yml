@@ -1,0 +1,24 @@
+services:
+  postgres:
+    restart: always
+
+  mailhog:
+    profiles:
+      - dev
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - uploads:/var/app/uploads
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes: []
+    restart: always

@@ -1,0 +1,318 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum UserRole {
+  admin
+  user
+}
+
+enum UserStatus {
+  draft
+  pending_confirmation
+  active
+  blocked
+  deactivated
+}
+
+enum OAuthProvider {
+  google
+  facebook
+}
+
+enum ConsentDocument {
+  terms
+  privacy
+  marketing
+}
+
+enum ComplaintStatus {
+  submitted
+  pending_review
+  approved
+  rejected
+  forwarded
+  closed
+}
+
+enum SubmissionType {
+  authenticated
+  anonymous
+}
+
+enum EmailOutboxStatus {
+  pending
+  sent
+  failed
+  dead
+}
+
+enum ComplaintEventType {
+  created
+  pending_review
+  approved
+  rejected
+  forwarded
+  closed
+  email_dispatched
+  email_failed
+  attachment_added
+}
+
+// ---------------------------------------------------------------------------
+// Models
+// ---------------------------------------------------------------------------
+
+model User {
+  id           String      @id @default(uuid())
+  email        String      @unique
+  emailVerified Boolean    @default(false)
+  name         String?
+  passwordHash String?
+  role         UserRole    @default(user)
+  status       UserStatus  @default(pending_confirmation)
+  createdAt    DateTime    @default(now()) @db.Timestamptz
+  updatedAt    DateTime    @updatedAt @db.Timestamptz
+  lastLoginAt  DateTime?   @db.Timestamptz
+  anonymizedAt DateTime?   @db.Timestamptz
+  failedLoginCount Int     @default(0)
+  lockedUntil  DateTime?   @db.Timestamptz
+
+  oauthIdentities      OAuthIdentity[]
+  consents             Consent[]
+  refreshTokens        RefreshToken[]
+  emailVerificationTokens EmailVerificationToken[]
+  passwordResetTokens  PasswordResetToken[]
+  complaints           Complaint[]       @relation("UserComplaints")
+  reviewedComplaints   Complaint[]       @relation("ReviewedComplaints")
+  auditLogs            AuditLog[]
+  emailOutboxRelated   EmailOutbox[]     @relation("OutboxRelatedUser")
+  complaintEvents      ComplaintEvent[]
+
+  @@index([role])
+  @@index([status])
+}
+
+model OAuthIdentity {
+  id             String        @id @default(uuid())
+  userId         String
+  provider       OAuthProvider
+  providerUserId String
+  createdAt      DateTime      @default(now()) @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerUserId])
+  @@index([userId])
+}
+
+model Consent {
+  id         String          @id @default(uuid())
+  userId     String
+  document   ConsentDocument
+  version    String
+  acceptedAt DateTime        @default(now()) @db.Timestamptz
+  ipAddress  String?
+  userAgent  String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, document])
+}
+
+model RefreshToken {
+  id         String    @id @default(uuid())
+  userId     String
+  tokenHash  String
+  issuedAt   DateTime  @default(now()) @db.Timestamptz
+  expiresAt  DateTime  @db.Timestamptz
+  revokedAt  DateTime? @db.Timestamptz
+  ipAddress  String
+  userAgent  String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+}
+
+model EmailVerificationToken {
+  id         String    @id @default(uuid())
+  userId     String
+  tokenHash  String    @unique
+  expiresAt  DateTime  @db.Timestamptz
+  consumedAt DateTime? @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id         String    @id @default(uuid())
+  userId     String
+  tokenHash  String    @unique
+  expiresAt  DateTime  @db.Timestamptz
+  consumedAt DateTime? @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Category {
+  id   String @id
+  name String
+
+  institutions Institution[]
+  complaints   Complaint[]
+}
+
+model Institution {
+  id         String   @id @default(uuid())
+  categoryId String
+  name       String
+  email      String
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now()) @db.Timestamptz
+  updatedAt  DateTime @updatedAt @db.Timestamptz
+
+  category   Category    @relation(fields: [categoryId], references: [id])
+  complaints Complaint[]
+
+  @@index([categoryId, active])
+}
+
+model Complaint {
+  id                  String          @id @default(uuid())
+  publicId            String          @unique
+  userId              String?
+  categoryId          String
+  institutionId       String?
+  institutionFreeText String?
+  title               String
+  body                String
+  urgent              Boolean         @default(false)
+  contactName         String?
+  contactEmail        String?
+  status              ComplaintStatus @default(submitted)
+  submissionType      SubmissionType
+  createdAt           DateTime        @default(now()) @db.Timestamptz
+  updatedAt           DateTime        @updatedAt @db.Timestamptz
+  reviewedById        String?
+  reviewedAt          DateTime?       @db.Timestamptz
+  forwardedAt         DateTime?       @db.Timestamptz
+  closedAt            DateTime?       @db.Timestamptz
+  ipAddress           String?
+  userAgent           String?
+
+  user        User?        @relation("UserComplaints", fields: [userId], references: [id])
+  reviewedBy  User?        @relation("ReviewedComplaints", fields: [reviewedById], references: [id])
+  category    Category     @relation(fields: [categoryId], references: [id])
+  institution Institution? @relation(fields: [institutionId], references: [id])
+  attachments Attachment[]
+  events      ComplaintEvent[]
+  emailOutbox EmailOutbox[]
+
+  // GIN tsvector index on (title, body) is maintained in raw SQL — see migration add_complaint_fts_index.
+  @@index([userId])
+  @@index([categoryId])
+  @@index([institutionId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([title, body])
+}
+
+model Attachment {
+  id               String   @id @default(uuid())
+  complaintId      String
+  originalFilename String
+  storagePath      String
+  mimeType         String
+  size             Int
+  createdAt        DateTime @default(now()) @db.Timestamptz
+
+  complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+
+  @@index([complaintId])
+}
+
+model ComplaintEvent {
+  id          String             @id @default(uuid())
+  complaintId String
+  event       ComplaintEventType
+  actorId     String?
+  at          DateTime           @default(now()) @db.Timestamptz
+  metadata    Json               @default("{}")
+
+  complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  actor     User?     @relation(fields: [actorId], references: [id])
+
+  @@index([complaintId, at])
+}
+
+model EmailOutbox {
+  id                String            @id @default(uuid())
+  toAddress         String
+  fromAddress       String
+  subject           String
+  bodyHtml          String
+  bodyText          String
+  template          String
+  relatedComplaintId String?
+  relatedUserId     String?
+  status            EmailOutboxStatus @default(pending)
+  attempts          Int               @default(0)
+  lastAttemptAt     DateTime?         @db.Timestamptz
+  lastError         String?
+  nextAttemptAt     DateTime          @default(now()) @db.Timestamptz
+  createdAt         DateTime          @default(now()) @db.Timestamptz
+  sentAt            DateTime?         @db.Timestamptz
+
+  relatedComplaint Complaint? @relation(fields: [relatedComplaintId], references: [id])
+  relatedUser      User?      @relation("OutboxRelatedUser", fields: [relatedUserId], references: [id])
+
+  @@index([status, nextAttemptAt])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  actorId   String?
+  event     String
+  target    String?
+  ipAddress String?
+  userAgent String?
+  at        DateTime @default(now()) @db.Timestamptz
+  metadata  Json     @default("{}")
+
+  actor User? @relation(fields: [actorId], references: [id])
+
+  @@index([at])
+  @@index([event])
+  @@index([actorId])
+}
+
+model Configuration {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt @db.Timestamptz
+}
+
+model OAuthExchangeCode {
+  code      String   @id
+  userId    String
+  createdAt DateTime @default(now()) @db.Timestamptz
+  expiresAt DateTime @db.Timestamptz
+  consumedAt DateTime? @db.Timestamptz
+
+  @@index([expiresAt])
+}
