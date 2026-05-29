@@ -354,19 +354,16 @@ export async function consumeOAuthExchangeCode(
   ipAddress?: string,
   userAgent?: string,
 ) {
-  const record = await prisma.oAuthExchangeCode.findUnique({ where: { code } });
-  if (!record || record.consumedAt) {
-    throw new HttpError(400, 'VALIDATION_ERROR', 'Invalid or expired exchange code.');
-  }
-  if (record.expiresAt < new Date()) {
-    await prisma.oAuthExchangeCode.delete({ where: { code } }).catch(() => undefined);
-    throw new HttpError(400, 'VALIDATION_ERROR', 'Exchange code has expired.');
-  }
-
-  await prisma.oAuthExchangeCode.update({
-    where: { code },
+  const claimed = await prisma.oAuthExchangeCode.updateMany({
+    where: { code, consumedAt: null, expiresAt: { gt: new Date() } },
     data: { consumedAt: new Date() },
   });
+  if (claimed.count === 0) {
+    throw new HttpError(400, 'VALIDATION_ERROR', 'Invalid or expired exchange code.');
+  }
+
+  const record = await prisma.oAuthExchangeCode.findUnique({ where: { code } });
+  if (!record) throw new HttpError(400, 'VALIDATION_ERROR', 'Invalid or expired exchange code.');
 
   const user = await prisma.user.findUnique({ where: { id: record.userId } });
   if (!user) throw new HttpError(404, 'NOT_FOUND', 'User not found.');

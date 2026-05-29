@@ -33,8 +33,9 @@ export function LoginForm() {
     setServerError(null);
     try {
       await login(data);
-      const from = searchParams.get('from') ?? '/';
-      navigate(from, { replace: true });
+      const fromParam = searchParams.get('from');
+      const safe = fromParam && /^\/(?!\/)/.test(fromParam) ? fromParam : '/';
+      navigate(safe, { replace: true });
     } catch (err) {
       const e = err as { message?: string; code?: string };
       if (e.code === 'AUTH_INVALID_CREDENTIALS') {
