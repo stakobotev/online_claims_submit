@@ -106,6 +106,14 @@ export async function anonymizeUser(targetId: string, actorId: string) {
       where: { userId: targetId, revokedAt: null },
       data: { revokedAt: new Date() },
     }),
+    prisma.emailVerificationToken.updateMany({
+      where: { userId: targetId, consumedAt: null },
+      data: { consumedAt: new Date() },
+    }),
+    prisma.passwordResetToken.updateMany({
+      where: { userId: targetId, consumedAt: null },
+      data: { consumedAt: new Date() },
+    }),
     prisma.complaint.updateMany({
       where: { userId: targetId },
       data: { ipAddress: null, userAgent: null, contactName: null, contactEmail: null },

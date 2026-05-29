@@ -1,5 +1,5 @@
 import { prisma } from '../../prisma.js';
-import type { EmailOutbox } from '@prisma/client';
+import type { EmailOutbox, Prisma } from '@prisma/client';
 
 export interface EnqueueOptions {
   toAddress: string;
@@ -12,8 +12,10 @@ export interface EnqueueOptions {
   relatedUserId?: string;
 }
 
-export async function enqueueEmail(opts: EnqueueOptions): Promise<EmailOutbox> {
-  return prisma.emailOutbox.create({
+type PrismaLike = Prisma.TransactionClient | typeof prisma;
+
+export async function enqueueEmail(opts: EnqueueOptions, tx: PrismaLike = prisma): Promise<EmailOutbox> {
+  return tx.emailOutbox.create({
     data: {
       toAddress: opts.toAddress,
       fromAddress: opts.fromAddress,

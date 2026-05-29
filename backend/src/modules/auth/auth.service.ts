@@ -146,17 +146,21 @@ export async function loginUser(
 
   if (user.lockedUntil && user.lockedUntil > new Date()) {
     await audit({ actorId: user.id, event: 'auth.login.locked', ipAddress, userAgent });
-    throw new HttpError(429, 'RATE_LIMITED', 'Account temporarily locked due to repeated failed sign-in attempts.');
+    throw badCreds;
   }
 
   const valid = await verifyPassword(user.passwordHash, input.password);
   if (!valid) {
-    const nextCount = user.failedLoginCount + 1;
-    const lockedUntil = nextCount >= LOGIN_LOCKOUT_THRESHOLD ? new Date(Date.now() + LOGIN_LOCKOUT_MS) : null;
-    await prisma.user.update({
+    const incremented = await prisma.user.update({
       where: { id: user.id },
-      data: { failedLoginCount: nextCount, lockedUntil },
+      data: { failedLoginCount: { increment: 1 } },
+      select: { failedLoginCount: true },
     });
+    let lockedUntil: Date | null = null;
+    if (incremented.failedLoginCount >= LOGIN_LOCKOUT_THRESHOLD) {
+      lockedUntil = new Date(Date.now() + LOGIN_LOCKOUT_MS);
+      await prisma.user.update({ where: { id: user.id }, data: { lockedUntil } });
+    }
     await audit({
       actorId: user.id,
       event: lockedUntil ? 'auth.login.locked' : 'auth.login.failed',
@@ -338,22 +342,23 @@ export async function resetPassword(rawToken: string, newPassword: string): Prom
 const OAUTH_EXCHANGE_TTL_MS = 60_000;
 
 export async function issueOAuthExchangeCode(userId: string): Promise<string> {
-  const code = randomToken(16);
+  const raw = randomToken(16);
   await prisma.oAuthExchangeCode.create({
     data: {
-      code,
+      code: hashToken(raw),
       userId,
       expiresAt: new Date(Date.now() + OAUTH_EXCHANGE_TTL_MS),
     },
   });
-  return code;
+  return raw;
 }
 
 export async function consumeOAuthExchangeCode(
-  code: string,
+  raw: string,
   ipAddress?: string,
   userAgent?: string,
 ) {
+  const code = hashToken(raw);
   const claimed = await prisma.oAuthExchangeCode.updateMany({
     where: { code, consumedAt: null, expiresAt: { gt: new Date() } },
     data: { consumedAt: new Date() },
@@ -405,14 +410,17 @@ export async function findOrCreateOAuthUser(
   const existingByEmail = await prisma.user.findUnique({ where: { email } });
   if (existingByEmail) {
     if (!existingByEmail.emailVerified) {
-      throw new HttpError(
-        409,
-        'CONFLICT',
-        'An unverified account exists for this email. Verify it via the original sign-up method before linking a social login.',
-      );
+      await audit({
+        actorId: existingByEmail.id,
+        event: 'auth.oauth.link_blocked',
+        metadata: { provider, reason: 'local_account_unverified' },
+      });
+      throw new HttpError(401, 'AUTH_FAILED', 'Sign-in failed.');
     }
-    await prisma.oAuthIdentity.create({
-      data: { userId: existingByEmail.id, provider, providerUserId },
+    await prisma.oAuthIdentity.upsert({
+      where: { provider_providerUserId: { provider, providerUserId } },
+      update: {},
+      create: { userId: existingByEmail.id, provider, providerUserId },
     });
     return existingByEmail;
   }
@@ -423,7 +431,12 @@ export async function findOrCreateOAuthUser(
       name: name ?? null,
       status: 'active',
       emailVerified: true,
-      oauthIdentities: { create: { provider, providerUserId } },
+      oauthIdentities: {
+        connectOrCreate: {
+          where: { provider_providerUserId: { provider, providerUserId } },
+          create: { provider, providerUserId },
+        },
+      },
     },
   });
 

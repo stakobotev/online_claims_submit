@@ -126,6 +126,7 @@ export async function forwardComplaint(complaintId: string): Promise<void> {
     include: { category: true, institution: true },
   });
   if (!complaint) return;
+  if (complaint.status === 'forwarded' || complaint.status === 'closed') return;
 
   const institutionName = complaint.institution?.name ?? complaint.institutionFreeText ?? 'Unknown Institution';
   const institutionEmail = complaint.institution?.email;
@@ -141,63 +142,77 @@ export async function forwardComplaint(complaintId: string): Promise<void> {
     submittedAt,
   };
 
-  type RoutingEvent = { event: 'email_dispatched' | 'email_failed'; metadata: Prisma.InputJsonValue };
-  const routingEvents: RoutingEvent[] = [];
-
-  if (institutionEmail) {
-    await enqueueMail({
-      template: 'complaint.to_institution',
-      to: institutionEmail,
-      subject: `[Vallentin Claims] Complaint ${complaint.publicId} — ${complaint.title}`,
-      data: emailData,
-      relatedComplaintId: complaint.id,
-    });
-    routingEvents.push({
-      event: 'email_dispatched',
-      metadata: { template: 'complaint.to_institution', to: institutionEmail },
-    });
-  } else {
-    routingEvents.push({
-      event: 'email_failed',
-      metadata: {
-        template: 'complaint.to_institution',
-        reason: 'no_institution_email',
-        institutionFreeText: complaint.institutionFreeText,
-      },
-    });
-  }
-
-  await forwardToOmbudsman({ ...emailData, relatedComplaintId: complaint.id });
-
-  if (complaint.contactEmail) {
-    await enqueueMail({
-      template: 'complaint.to_user_copy',
-      to: complaint.contactEmail,
-      subject: `[Vallentin Claims] Your complaint ${complaint.publicId} has been submitted`,
-      data: emailData,
-      relatedComplaintId: complaint.id,
-    });
-  }
-
   const forwardedToInstitution = !!institutionEmail;
 
-  await prisma.$transaction([
-    prisma.complaint.update({
-      where: { id: complaintId },
+  const committed = await prisma.$transaction(async (tx) => {
+    const claimed = await tx.complaint.updateMany({
+      where: { id: complaintId, status: { notIn: ['forwarded', 'closed'] } },
       data: { status: 'forwarded', forwardedAt: new Date() },
-    }),
-    ...routingEvents.map((e) =>
-      prisma.complaintEvent.create({ data: { complaintId, event: e.event, actorId: null, metadata: e.metadata } }),
-    ),
-    prisma.complaintEvent.create({
+    });
+    if (claimed.count === 0) return false;
+
+    if (institutionEmail) {
+      await enqueueMail(
+        {
+          template: 'complaint.to_institution',
+          to: institutionEmail,
+          subject: `[Vallentin Claims] Complaint ${complaint.publicId} — ${complaint.title}`,
+          data: emailData,
+          relatedComplaintId: complaint.id,
+        },
+        tx,
+      );
+      await tx.complaintEvent.create({
+        data: {
+          complaintId,
+          event: 'email_dispatched',
+          actorId: null,
+          metadata: { template: 'complaint.to_institution', to: institutionEmail },
+        },
+      });
+    } else {
+      await tx.complaintEvent.create({
+        data: {
+          complaintId,
+          event: 'email_failed',
+          actorId: null,
+          metadata: {
+            template: 'complaint.to_institution',
+            reason: 'no_institution_email',
+            institutionFreeText: complaint.institutionFreeText,
+          },
+        },
+      });
+    }
+
+    await forwardToOmbudsman({ ...emailData, relatedComplaintId: complaint.id }, tx);
+
+    if (complaint.contactEmail) {
+      await enqueueMail(
+        {
+          template: 'complaint.to_user_copy',
+          to: complaint.contactEmail,
+          subject: `[Vallentin Claims] Your complaint ${complaint.publicId} has been submitted`,
+          data: emailData,
+          relatedComplaintId: complaint.id,
+        },
+        tx,
+      );
+    }
+
+    await tx.complaintEvent.create({
       data: {
         complaintId,
         event: 'forwarded',
         actorId: null,
         metadata: { forwardedToInstitution, forwardedToOmbudsman: true },
       },
-    }),
-  ]);
+    });
+
+    return true;
+  });
+
+  if (!committed) return;
 
   await audit({
     event: 'complaint.state.changed',

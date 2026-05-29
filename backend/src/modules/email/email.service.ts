@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { enqueueEmail } from './outbox.repository.js';
 import { config } from '../../config/index.js';
+import type { Prisma } from '@prisma/client';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -35,19 +36,22 @@ export interface EnqueueMailOptions {
   relatedUserId?: string;
 }
 
-export async function enqueueMail(opts: EnqueueMailOptions): Promise<void> {
+export async function enqueueMail(opts: EnqueueMailOptions, tx?: Prisma.TransactionClient): Promise<void> {
   const tpl = getTemplate(opts.template);
   const bodyHtml = tpl.html(opts.data);
   const bodyText = tpl.txt(opts.data);
 
-  await enqueueEmail({
-    toAddress: opts.to,
-    fromAddress: config.MAIL_FROM,
-    subject: opts.subject,
-    bodyHtml,
-    bodyText,
-    template: opts.template,
-    relatedComplaintId: opts.relatedComplaintId,
-    relatedUserId: opts.relatedUserId,
-  });
+  await enqueueEmail(
+    {
+      toAddress: opts.to,
+      fromAddress: config.MAIL_FROM,
+      subject: opts.subject,
+      bodyHtml,
+      bodyText,
+      template: opts.template,
+      relatedComplaintId: opts.relatedComplaintId,
+      relatedUserId: opts.relatedUserId,
+    },
+    tx,
+  );
 }
