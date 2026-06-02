@@ -405,7 +405,16 @@ export async function findOrCreateOAuthUser(
     include: { user: true },
   });
 
-  if (existing) return existing.user;
+  if (existing) {
+    if (!existing.user.name && name) {
+      const updated = await prisma.user.update({
+        where: { id: existing.user.id },
+        data: { name },
+      });
+      return updated;
+    }
+    return existing.user;
+  }
 
   const existingByEmail = await prisma.user.findUnique({ where: { email } });
   if (existingByEmail) {
@@ -422,6 +431,13 @@ export async function findOrCreateOAuthUser(
       update: {},
       create: { userId: existingByEmail.id, provider, providerUserId },
     });
+    if (!existingByEmail.name && name) {
+      const updated = await prisma.user.update({
+        where: { id: existingByEmail.id },
+        data: { name },
+      });
+      return updated;
+    }
     return existingByEmail;
   }
 

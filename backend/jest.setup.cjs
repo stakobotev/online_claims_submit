@@ -1,6 +1,6 @@
 process.env.NODE_ENV = 'test';
 process.env.PORT = process.env.PORT || '3000';
-process.env.PUBLIC_FRONTEND_URL = process.env.PUBLIC_FRONTEND_URL || 'http://localhost:5173';
+process.env.PUBLIC_FRONTEND_URL = process.env.PUBLIC_FRONTEND_URL || 'http://localhost:5174';
 process.env.PUBLIC_BACKEND_URL = process.env.PUBLIC_BACKEND_URL || 'http://localhost:3000';
 process.env.DATABASE_URL = process.env.DATABASE_URL || 'postgresql://test:test@localhost:5432/test?schema=public';
 process.env.JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET || 'test-access-secret-must-be-long-enough-for-jwt';

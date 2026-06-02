@@ -62,7 +62,7 @@ docker compose exec backend npm run seed
 
 Then open:
 
-- App: <http://localhost:5173>
+- App: <http://localhost:5174>
 - API health: <http://localhost:3000/api/health>
 - Captured emails (MailHog): <http://localhost:8025>
 - Postgres: `localhost:5433` (user `vallentin`, password `vallentin`, db `vallentin`)
@@ -97,7 +97,7 @@ cd ..
 # 4. Backend dev server (terminal 1) — watches and reloads on save
 cd backend && npm run dev
 
-# 5. Frontend dev server (terminal 2) — Vite HMR on http://localhost:5173
+# 5. Frontend dev server (terminal 2) — Vite HMR on http://localhost:5174
 cd frontend && npm run dev
 ```
 
@@ -119,7 +119,7 @@ curl -X POST http://localhost:3000/api/auth/login \
 
 In the browser:
 
-1. Open <http://localhost:5173>, log in with the seeded admin credentials.
+1. Open <http://localhost:5174>, log in with the seeded admin credentials.
 2. Submit a complaint via the **Submit complaint** form.
 3. Within ~15 seconds the outbox worker dispatches the institution and Ombudsman emails. Confirm at <http://localhost:8025>.
 
@@ -140,7 +140,7 @@ In the browser:
 ## Troubleshooting
 
 - **Port 5432 already in use** — that is why the compose file maps Postgres to `5433`. If `5433` is also taken, edit `docker-compose.yml` `postgres.ports`.
-- **Port 3000 or 5173 in use** — kill the conflicting process. On Windows: `Get-NetTCPConnection -LocalPort 3000` to find the owning PID, then `Stop-Process -Id <pid> -Force`.
+- **Port 3000 or 5174 in use** — kill the conflicting process. On Windows: `Get-NetTCPConnection -LocalPort 3000` to find the owning PID, then `Stop-Process -Id <pid> -Force`.
 - **`Cannot find module @prisma/client`** — run `npx prisma generate` in `backend/` (or `npm install` again to trigger the postinstall hook).
 - **`EPERM mkdir 'C:\Program Files\Git\var\app\uploads'`** — set `UPLOAD_DIR=./uploads` in `.env` for Mode B; Git Bash translates the absolute Linux path under its own install directory.
 - **Login returns `AUTH_INVALID_CREDENTIALS`** — the seed has not run. From `backend/`, with `.env` loaded, run `npm run seed`.

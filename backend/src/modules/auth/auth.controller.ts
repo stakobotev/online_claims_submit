@@ -34,7 +34,7 @@ export async function verifyEmailHandler(req: Request, res: Response, next: Next
     const token = req.query['token'] as string | undefined;
     if (!token) throw new HttpError(400, 'VALIDATION_ERROR', 'Token is required.');
     await verifyEmail(token);
-    res.redirect(`${config.PUBLIC_FRONTEND_URL}/login?verified=1`);
+    res.redirect(`${config.PUBLIC_FRONTEND_URL}/auth/login?verified=1`);
   } catch (err) {
     next(err);
   }
@@ -110,12 +110,12 @@ export async function resetPasswordHandler(req: Request, res: Response, next: Ne
 export async function oauthCallback(req: Request, res: Response): Promise<void> {
   const user = req.user as { sub: string; email: string; role: 'admin' | 'user' } | undefined;
   if (!user) {
-    res.redirect(`${config.PUBLIC_FRONTEND_URL}/login?error=oauth_failed`);
+    res.redirect(`${config.PUBLIC_FRONTEND_URL}/auth/login?error=oauth_failed`);
     return;
   }
 
   const code = await issueOAuthExchangeCode(user.sub);
-  res.redirect(`${config.PUBLIC_FRONTEND_URL}/oauth/callback?code=${code}`);
+  res.redirect(`${config.PUBLIC_FRONTEND_URL}/auth/oauth/callback?code=${code}`);
 }
 
 export async function oauthExchange(req: Request, res: Response, next: NextFunction): Promise<void> {

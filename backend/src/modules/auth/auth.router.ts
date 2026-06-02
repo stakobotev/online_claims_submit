@@ -36,7 +36,7 @@ function verifyOAuthState(req: Request, res: Response, next: NextFunction) {
   const queryState = typeof req.query['state'] === 'string' ? req.query['state'] : undefined;
   res.clearCookie(OAUTH_STATE_COOKIE, { path: '/' });
   if (!cookieState || !queryState || cookieState !== queryState) {
-    return res.redirect(`${config.PUBLIC_FRONTEND_URL}/login?error=oauth_state_invalid`);
+    return res.redirect(`${config.PUBLIC_FRONTEND_URL}/auth/login?error=oauth_state_invalid`);
   }
   next();
 }
@@ -73,7 +73,8 @@ if (config.GOOGLE_CLIENT_ID && config.GOOGLE_CLIENT_SECRET) {
         try {
           const email = profile.emails?.[0]?.value;
           if (!email) return done(new Error('No email from Google'));
-          const user = await findOrCreateOAuthUser('google', profile.id, email, profile.displayName);
+          const fullName = extractProfileName(profile, email);
+          const user = await findOrCreateOAuthUser('google', profile.id, email, fullName);
           done(null, { sub: user.id, email: user.email, role: user.role });
         } catch (err) {
           done(err as Error);
@@ -90,13 +91,14 @@ if (config.FACEBOOK_APP_ID && config.FACEBOOK_APP_SECRET) {
         clientID: config.FACEBOOK_APP_ID,
         clientSecret: config.FACEBOOK_APP_SECRET,
         callbackURL: config.FACEBOOK_REDIRECT_URL,
-        profileFields: ['id', 'emails', 'displayName'],
+        profileFields: ['id', 'emails', 'displayName', 'name'],
       },
       async (_accessToken, _refreshToken, profile, done) => {
         try {
           const email = profile.emails?.[0]?.value;
           if (!email) return done(new Error('No email from Facebook'));
-          const user = await findOrCreateOAuthUser('facebook', profile.id, email, profile.displayName);
+          const fullName = extractProfileName(profile, email);
+          const user = await findOrCreateOAuthUser('facebook', profile.id, email, fullName);
           done(null, { sub: user.id, email: user.email, role: user.role });
         } catch (err) {
           done(err as Error);
@@ -104,6 +106,19 @@ if (config.FACEBOOK_APP_ID && config.FACEBOOK_APP_SECRET) {
       },
     ),
   );
+}
+
+function extractProfileName(
+  profile: { displayName?: string; name?: { givenName?: string; familyName?: string } },
+  email: string,
+): string | undefined {
+  const combined = [profile.name?.givenName, profile.name?.familyName]
+    .filter((part): part is string => Boolean(part && part.trim()))
+    .join(' ')
+    .trim();
+  const candidate = combined || profile.displayName?.trim() || '';
+  if (!candidate || candidate.toLowerCase() === email.toLowerCase()) return undefined;
+  return candidate;
 }
 
 passport.serializeUser((user, done) => done(null, user));
@@ -125,7 +140,10 @@ if (config.GOOGLE_CLIENT_ID) {
   router.get(
     '/oauth/google/callback',
     verifyOAuthState,
-    passport.authenticate('google', { session: false, failureRedirect: '/login?error=oauth_failed' }),
+    passport.authenticate('google', {
+      session: false,
+      failureRedirect: `${config.PUBLIC_FRONTEND_URL}/auth/login?error=oauth_failed`,
+    }),
     oauthCallback,
   );
 }
@@ -135,7 +153,10 @@ if (config.FACEBOOK_APP_ID) {
   router.get(
     '/oauth/facebook/callback',
     verifyOAuthState,
-    passport.authenticate('facebook', { session: false, failureRedirect: '/login?error=oauth_failed' }),
+    passport.authenticate('facebook', {
+      session: false,
+      failureRedirect: `${config.PUBLIC_FRONTEND_URL}/auth/login?error=oauth_failed`,
+    }),
     oauthCallback,
   );
 }

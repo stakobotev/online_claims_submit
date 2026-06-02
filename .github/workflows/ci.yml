@@ -31,7 +31,7 @@ jobs:
       DATABASE_URL: postgresql://vallentin:vallentin@localhost:5432/vallentin_test?schema=public
       JWT_ACCESS_SECRET: test-access-secret
       JWT_REFRESH_SECRET: test-refresh-secret
-      PUBLIC_FRONTEND_URL: http://localhost:5173
+      PUBLIC_FRONTEND_URL: http://localhost:5174
       PUBLIC_BACKEND_URL: http://localhost:3000
       OMBUDSMAN_EMAIL: ombudsman@example.org
       ADMIN_EMAIL: admin@vallentin.local
