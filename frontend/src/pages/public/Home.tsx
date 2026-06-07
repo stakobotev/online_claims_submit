@@ -46,16 +46,16 @@ export function Home() {
             </Link>
             {!user && (
               <>
-                <Link to="/auth/login" className={buttonClass('outline', 'lg', 'border-white text-white hover:bg-primary-800')}>
+                <Link to="/auth/login" className={buttonClass('outline', 'lg', 'bg-transparent border-white text-white hover:bg-primary-800')}>
                   {t('nav.login')}
                 </Link>
-                <Link to="/auth/register" className={buttonClass('outline', 'lg', 'border-white text-white hover:bg-primary-800')}>
+                <Link to="/auth/register" className={buttonClass('outline', 'lg', 'bg-transparent border-white text-white hover:bg-primary-800')}>
                   {t('nav.register')}
                 </Link>
               </>
             )}
             {user && (
-              <Link to="/complaints" className={buttonClass('outline', 'lg', 'border-white text-white hover:bg-primary-800')}>
+              <Link to="/complaints" className={buttonClass('outline', 'lg', 'bg-transparent border-white text-white hover:bg-primary-800')}>
                 {t('nav.myComplaints')}
               </Link>
             )}
