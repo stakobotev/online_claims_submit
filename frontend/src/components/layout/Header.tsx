@@ -16,12 +16,12 @@ export function Header() {
   };
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `text-sm font-medium transition-colors ${isActive ? 'text-primary-700' : 'text-gray-600 hover:text-gray-900'}`;
+    `text-sm font-semibold transition-colors ${isActive ? 'text-primary-500' : 'text-ink-muted hover:text-primary-500'}`;
 
   return (
     <header className="sticky top-0 z-40 border-b border-gray-200 bg-white shadow-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
-        <Link to="/" className="flex items-center gap-2 font-bold text-primary-700 text-lg">
+        <Link to="/" className="flex items-center gap-2 font-display font-extrabold tracking-tight text-primary-500 text-lg">
           {t('app.name')}
         </Link>
 
@@ -48,14 +48,14 @@ export function Header() {
 
           {user ? (
             <div className="hidden md:flex items-center gap-3">
-              <span className="text-sm text-gray-600">{user.name ?? user.email}</span>
+              <span className="text-sm text-ink-muted">{user.name ?? user.email}</span>
               <Button variant="outline" size="sm" onClick={() => void logout()}>
                 {t('nav.logout')}
               </Button>
             </div>
           ) : (
             <div className="hidden md:flex items-center gap-2">
-              <Link to="/auth/login" className={buttonClass('ghost', 'sm')}>
+              <Link to="/auth/login" className={buttonClass('outline', 'sm')}>
                 {t('nav.login')}
               </Link>
               <Link to="/auth/register" className={buttonClass('primary', 'sm')}>

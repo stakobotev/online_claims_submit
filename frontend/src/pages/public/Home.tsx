@@ -10,7 +10,7 @@ import { Spinner } from '../../components/ui/Spinner';
 import { buttonClass } from '../../components/ui/Button';
 import { publicIdPattern } from '../../utils/formatters';
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b'];
+const COLORS = ['#b43232', '#d96565', '#ffcf43'];
 
 export function Home() {
   const { t } = useTranslation();
@@ -34,28 +34,38 @@ export function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-700 to-primary-900 text-white py-20 px-4">
-        <div className="mx-auto max-w-4xl text-center space-y-6">
-          <h1 className="text-4xl font-bold sm:text-5xl">{t('home.hero.title', 'Healthcare complaint platform')}</h1>
-          <p className="text-lg text-primary-100 max-w-2xl mx-auto">
+      <section className="relative overflow-hidden bg-[#353b3e] text-white py-28 px-4">
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-40"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1920&q=70')",
+          }}
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60" />
+        <div className="relative mx-auto max-w-4xl text-center space-y-6">
+          <h1 className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
+            {t('home.hero.title', 'Healthcare complaint platform')}
+          </h1>
+          <p className="mx-auto max-w-2xl text-lg text-white/85">
             {t('home.hero.subtitle', 'Submit complaints against hospitals, doctors, and health insurance funds. Your complaint is forwarded to the relevant institution and the Ombudsman.')}
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/complaints/submit" className={buttonClass('secondary', 'lg')}>
+          <div className="flex flex-wrap justify-center gap-4 pt-2">
+            <Link to="/complaints/submit" className={buttonClass('primary', 'lg')}>
               {t('home.cta.submit', 'Submit a complaint')}
             </Link>
             {!user && (
               <>
-                <Link to="/auth/login" className={buttonClass('outline', 'lg', 'bg-transparent border-white text-white hover:bg-primary-800')}>
+                <Link to="/auth/login" className={buttonClass('outline', 'lg', 'border-white text-white hover:bg-white/10')}>
                   {t('nav.login')}
                 </Link>
-                <Link to="/auth/register" className={buttonClass('outline', 'lg', 'bg-transparent border-white text-white hover:bg-primary-800')}>
+                <Link to="/auth/register" className={buttonClass('outline', 'lg', 'border-white text-white hover:bg-white/10')}>
                   {t('nav.register')}
                 </Link>
               </>
             )}
             {user && (
-              <Link to="/complaints" className={buttonClass('outline', 'lg', 'bg-transparent border-white text-white hover:bg-primary-800')}>
+              <Link to="/complaints" className={buttonClass('outline', 'lg', 'border-white text-white hover:bg-white/10')}>
                 {t('nav.myComplaints')}
               </Link>
             )}
@@ -92,20 +102,20 @@ export function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <Card>
                 <CardBody className="text-center">
-                  <p className="text-4xl font-bold text-primary-700">{stats.totalComplaints.toLocaleString()}</p>
-                  <p className="mt-1 text-sm text-gray-500">{t('stats.totalComplaints', 'Total complaints')}</p>
+                  <p className="font-display text-4xl font-extrabold text-primary-500">{stats.totalComplaints.toLocaleString()}</p>
+                  <p className="mt-1 text-sm text-ink-muted">{t('stats.totalComplaints', 'Total complaints')}</p>
                 </CardBody>
               </Card>
               <Card>
                 <CardBody className="text-center">
-                  <p className="text-4xl font-bold text-green-600">{stats.totalForwarded.toLocaleString()}</p>
-                  <p className="mt-1 text-sm text-gray-500">{t('stats.forwarded', 'Forwarded to institutions')}</p>
+                  <p className="font-display text-4xl font-extrabold text-navy">{stats.totalForwarded.toLocaleString()}</p>
+                  <p className="mt-1 text-sm text-ink-muted">{t('stats.forwarded', 'Forwarded to institutions')}</p>
                 </CardBody>
               </Card>
               <Card>
                 <CardBody className="text-center">
-                  <p className="text-4xl font-bold text-yellow-600">{stats.byUrgency.urgent.toLocaleString()}</p>
-                  <p className="mt-1 text-sm text-gray-500">{t('stats.urgent', 'Marked urgent')}</p>
+                  <p className="font-display text-4xl font-extrabold text-accent-dark">{stats.byUrgency.urgent.toLocaleString()}</p>
+                  <p className="mt-1 text-sm text-ink-muted">{t('stats.urgent', 'Marked urgent')}</p>
                 </CardBody>
               </Card>
 
@@ -150,11 +160,11 @@ export function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[1, 2, 3].map((step) => (
               <div key={step} className="text-center space-y-2">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 text-primary-700 font-bold text-lg">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary-500 text-white font-display font-extrabold text-lg shadow-sm">
                   {step}
                 </div>
-                <h3 className="font-semibold text-gray-900">{t(`home.step${step}.title`, `Step ${step}`)}</h3>
-                <p className="text-sm text-gray-500">{t(`home.step${step}.desc`, '')}</p>
+                <h3 className="font-display font-semibold text-ink">{t(`home.step${step}.title`, `Step ${step}`)}</h3>
+                <p className="text-sm text-ink-muted">{t(`home.step${step}.desc`, '')}</p>
               </div>
             ))}
           </div>

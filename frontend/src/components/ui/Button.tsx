@@ -11,14 +11,14 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 const base =
-  'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
+  'inline-flex items-center justify-center rounded font-semibold uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800',
-  secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 active:bg-gray-300',
-  danger: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800',
-  ghost: 'text-gray-700 hover:bg-gray-100 active:bg-gray-200',
-  outline: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50',
+  primary: 'border-2 border-primary-500 bg-primary-500 text-white hover:bg-primary-600 hover:border-primary-600 active:bg-primary-700 active:border-primary-700 shadow-sm',
+  secondary: 'border-2 border-accent bg-accent text-ink hover:bg-accent-dark hover:border-accent-dark hover:text-white active:bg-accent-dark shadow-sm',
+  danger: 'border-2 border-red-700 bg-red-700 text-white hover:bg-red-800 hover:border-red-800',
+  ghost: 'text-primary-500 hover:bg-primary-50 active:bg-primary-100',
+  outline: 'border-2 border-primary-500 bg-transparent text-primary-500 hover:bg-primary-50 active:bg-primary-100',
 };
 
 const sizes: Record<Size, string> = {
