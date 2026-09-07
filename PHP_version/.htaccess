@@ -1,0 +1,8 @@
+# Fallback for hosts whose document root is the project folder (not /public).
+# Prefer pointing your vhost/docroot at the public/ directory instead.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(config|src|views|locales|emails|sql|storage)(/.*)?$ - [F]
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

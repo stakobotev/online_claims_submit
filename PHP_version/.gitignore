@@ -1,0 +1,6 @@
+# Local configuration with secrets
+/config/config.php
+
+# Uploaded attachments
+/storage/uploads/*
+!/storage/uploads/.gitkeep

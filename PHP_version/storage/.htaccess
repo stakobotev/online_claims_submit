@@ -1,0 +1,2 @@
+# Uploaded files must never be served directly by the web server.
+Require all denied
