@@ -2,7 +2,7 @@ Complaint Received — {{publicId}}
 
 Dear {{institutionName}},
 
-A complaint has been submitted against your institution via the Vallentin Claims platform.
+A complaint has been submitted against your institution via the Thirstforlife Claims platform.
 
 Reference: {{publicId}}
 Category: {{categoryName}}
@@ -15,4 +15,4 @@ Details:
 
 Please review and respond to this complaint within the statutory timeframe. A copy of this complaint has also been forwarded to the Healthcare Ombudsman.
 
-— Vallentin Claims Platform
+— Thirstforlife Claims Platform

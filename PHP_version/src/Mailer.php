@@ -36,7 +36,7 @@ final class Mailer
         $text = self::render($template, 'txt', $data);
 
         $fromEmail = (string) cfg('MAIL_FROM_EMAIL', 'no-reply@localhost');
-        $fromName  = (string) cfg('MAIL_FROM_NAME', 'Vallentin Claims');
+        $fromName  = (string) cfg('MAIL_FROM_NAME', 'Thirstforlife Claims');
         $from      = "{$fromName} <{$fromEmail}>";
 
         $id = Ids::uuid();

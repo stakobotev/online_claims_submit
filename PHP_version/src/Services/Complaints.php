@@ -84,7 +84,7 @@ final class Complaints
             Mailer::send(
                 'admin.new_anonymous_complaint',
                 (string) cfg('OMBUDSMAN_EMAIL', ''),
-                "[Vallentin Claims] New anonymous complaint {$publicId} requires review",
+                "[Thirstforlife Claims] New anonymous complaint {$publicId} requires review",
                 [
                     'publicId' => $publicId,
                     'categoryName' => $c['categoryName'],
@@ -138,7 +138,7 @@ final class Complaints
 
         if ($institutionEmail) {
             Mailer::send('complaint.to_institution', $institutionEmail,
-                "[Vallentin Claims] Complaint {$c['publicId']} — {$c['title']}", $emailData, $complaintId);
+                "[Thirstforlife Claims] Complaint {$c['publicId']} — {$c['title']}", $emailData, $complaintId);
             self::event($complaintId, 'email_dispatched', null, ['template' => 'complaint.to_institution', 'to' => $institutionEmail]);
         } else {
             self::event($complaintId, 'email_failed', null, [
@@ -152,12 +152,12 @@ final class Complaints
         $ombuds = (string) cfg('OMBUDSMAN_EMAIL', '');
         if ($ombuds !== '') {
             Mailer::send('complaint.to_ombudsman', $ombuds,
-                "[Vallentin Claims] Complaint {$c['publicId']} forwarded", $emailData, $complaintId);
+                "[Thirstforlife Claims] Complaint {$c['publicId']} forwarded", $emailData, $complaintId);
         }
 
         if ($c['contactEmail']) {
             Mailer::send('complaint.to_user_copy', $c['contactEmail'],
-                "[Vallentin Claims] Your complaint {$c['publicId']} has been submitted", $emailData, $complaintId);
+                "[Thirstforlife Claims] Your complaint {$c['publicId']} has been submitted", $emailData, $complaintId);
         }
 
         self::event($complaintId, 'forwarded', null, ['forwardedToInstitution' => (bool) $institutionEmail, 'forwardedToOmbudsman' => true]);

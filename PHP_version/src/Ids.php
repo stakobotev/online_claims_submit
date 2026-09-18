@@ -8,7 +8,8 @@ namespace App;
  *  - uuid()            : RFC-4122 v4 (Prisma @default(uuid))
  *  - randomToken()     : hex token for email/verification links
  *  - hashToken()       : sha256 hex (tokens stored hashed at rest)
- *  - generatePublicId(): atomic per-year counter -> VLC-YYYY-NNNNNN
+ *  - generatePublicId(): atomic per-year counter -> TFL-YYYY-NNNNNN
+ *                        (existing VLC- ids from before the rename are kept)
  */
 final class Ids
 {
@@ -44,6 +45,6 @@ final class Ids
             ['k' => $key],
         );
         $counter = (int) ($row['value'] ?? 1);
-        return sprintf('VLC-%d-%06d', $year, $counter);
+        return sprintf('TFL-%d-%06d', $year, $counter);
     }
 }

@@ -1,6 +1,6 @@
-# Vallentin Claims — PHP Edition
+# Thirstforlife Claims — PHP Edition
 
-A complete rewrite of the Vallentin Claims healthcare complaint-management
+A complete rewrite of the Thirstforlife Claims healthcare complaint-management
 platform in **plain PHP (no framework)** with **PDO / PostgreSQL**, intended for
 restricted shared hosting where only PHP is permitted.
 
@@ -19,7 +19,7 @@ folders was modified — this is a self-contained parallel implementation.
   require admin approval before forwarding; authenticated complaints are
   forwarded immediately to the selected institution, with a copy to the
   Ombudsman and an optional confirmation copy to the submitter.
-- **Public tracking** by complaint ID (`VLC-YYYY-NNNNNN`).
+- **Public tracking** by complaint ID (`TFL-YYYY-NNNNNN`).
 - **Accounts** — register (with terms/privacy/marketing consent capture), email
   verification, login with lockout after repeated failures, password reset, and
   **Google OAuth** sign-in.

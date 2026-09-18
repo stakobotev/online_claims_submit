@@ -1,6 +1,6 @@
 Your Complaint Has Been Submitted — {{publicId}}
 
-Thank you for submitting your complaint via Vallentin Claims.
+Thank you for submitting your complaint via Thirstforlife Claims.
 
 Reference: {{publicId}}
 Category: {{categoryName}}
@@ -10,4 +10,4 @@ Submitted: {{submittedAt}}
 
 Your complaint has been forwarded to the institution and to the Healthcare Ombudsman. Please keep your reference number for future inquiries.
 
-— The Vallentin Claims Team
+— The Thirstforlife Claims Team

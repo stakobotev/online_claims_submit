@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Vallentin Claims",
+    "name": "Thirstforlife Claims",
     "tagline": "Healthcare complaint management platform"
   },
   "nav": {
@@ -126,7 +126,7 @@
       "submit": "Submit a complaint"
     },
     "track": {
-      "placeholder": "Track complaint: VLC-2026-000123",
+      "placeholder": "Track complaint: TFL-2026-000123",
       "label": "Complaint ID",
       "action": "Track"
     },
@@ -150,8 +150,8 @@
     }
   },
   "about": {
-    "title": "About Vallentin Claims",
-    "p1": "Vallentin Claims is a web-based platform that allows citizens to submit complaints against healthcare institutions — hospitals, doctors, and health insurance funds.",
+    "title": "About Thirstforlife Claims",
+    "p1": "Thirstforlife Claims is a web-based platform that allows citizens to submit complaints against healthcare institutions — hospitals, doctors, and health insurance funds.",
     "p2": "Complaints submitted by registered users are forwarded immediately to the relevant institution and a copy is sent to the Ombudsman. Anonymous submissions are reviewed by an administrator first.",
     "p3": "The platform is designed with privacy and security in mind. Personal data is handled in accordance with GDPR.",
     "contact": "Contact",
@@ -199,7 +199,7 @@
   },
   "track": {
     "title": "Track a complaint",
-    "placeholder": "Enter complaint ID (e.g. VLC-2026-000123)",
+    "placeholder": "Enter complaint ID (e.g. TFL-2026-000123)",
     "inputLabel": "Complaint ID",
     "action": "Track",
     "notFound": "Complaint not found or you do not have access. Sign in to track your submissions."

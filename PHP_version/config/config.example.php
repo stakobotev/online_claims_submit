@@ -1,6 +1,6 @@
 <?php
 /**
- * Vallentin Claims — PHP edition configuration.
+ * Thirstforlife Claims — PHP edition configuration.
  *
  * Copy this file to config/config.php and adjust for your environment.
  * On restricted/shared PHP hosting you normally cannot set OS env vars, so the
@@ -57,7 +57,7 @@ return [
     'SMTP_PASSWORD'       => '',
     'SMTP_SECURE'         => '',        // '' | 'tls' | 'ssl'
     'MAIL_FROM_EMAIL'     => 'no-reply@health.local',
-    'MAIL_FROM_NAME'      => 'Vallentin Claims',
+    'MAIL_FROM_NAME'      => 'Thirstforlife Claims',
 
     // --- Ombudsman ---
     'OMBUDSMAN_EMAIL'     => 'ombudsman@example.org',

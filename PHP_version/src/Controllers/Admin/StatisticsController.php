@@ -37,7 +37,7 @@ final class StatisticsController
         Audit::log('admin.statistics.exported', $admin['id'], null, ['format' => $format, 'count' => count($rows)]);
 
         if ($format === 'pdf') {
-            $pdf = new Pdf('Vallentin Claims — Statistics Export');
+            $pdf = new Pdf('Thirstforlife Claims — Statistics Export');
             $pdf->line('Generated: ' . date('Y-m-d H:i'));
             $pdf->line(str_repeat('-', 90));
             $pdf->line(implode('  ', $columns));

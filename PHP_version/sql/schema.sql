@@ -1,4 +1,4 @@
--- Vallentin Claims — PostgreSQL schema (PHP edition)
+-- Thirstforlife Claims — PostgreSQL schema (PHP edition)
 -- Faithful port of backend/prisma/schema.prisma. Table/column identifiers keep
 -- the Prisma casing ("User", "emailVerified", ...) so the same DB can be shared
 -- with the original app if desired, and so generatePublicId's raw SQL matches.

@@ -138,7 +138,7 @@ final class Auth
         Mailer::send(
             'auth.verify_email',
             $email,
-            'Verify your email — Vallentin Claims',
+            'Verify your email — Thirstforlife Claims',
             ['name' => $name ?: '', 'verifyUrl' => url('/auth/verify-email?token=' . $raw)],
             null,
             $userId,
@@ -241,7 +241,7 @@ final class Auth
         Mailer::send(
             'auth.password_reset',
             $user['email'],
-            'Reset your password — Vallentin Claims',
+            'Reset your password — Thirstforlife Claims',
             ['name' => $user['name'] ?: '', 'resetUrl' => url('/auth/reset-password?token=' . $raw)],
             null,
             $user['id'],

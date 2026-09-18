@@ -9,4 +9,4 @@ Submitted: {{submittedAt}}
 
 Review in Admin Panel: {{adminUrl}}
 
-— Vallentin Claims Platform
+— Thirstforlife Claims Platform

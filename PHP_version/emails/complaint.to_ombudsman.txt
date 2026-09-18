@@ -14,4 +14,4 @@ Submitted: {{submittedAt}}
 Details:
 {{body}}
 
-— Vallentin Claims Platform
+— Thirstforlife Claims Platform
