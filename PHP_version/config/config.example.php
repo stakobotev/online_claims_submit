@@ -15,14 +15,12 @@ return [
     'APP_ENV'             => 'development',           // development | production
     'PUBLIC_BASE_URL'     => 'http://localhost:8080', // public URL of THIS php app (no trailing slash)
 
-    // --- Database (PostgreSQL) ---
-    // The original app targets PostgreSQL. Keep the same DB/schema.
+    // --- Database (MySQL / MariaDB) ---
     'DB_HOST'             => 'localhost',
-    'DB_PORT'             => '5433',
-    'DB_NAME'             => 'vallentin',
-    'DB_USER'             => 'vallentin',
-    'DB_PASSWORD'         => 'vallentin',
-    'DB_SCHEMA'           => 'public',
+    'DB_PORT'             => '3306',
+    'DB_NAME'             => 'thirstforlife',
+    'DB_USER'             => 'thirstforlife',
+    'DB_PASSWORD'         => 'change-me',
 
     // --- Password hashing (Argon2id) ---
     // PHP's PASSWORD_ARGON2ID uses KiB for memory, matching argon2 in Node.

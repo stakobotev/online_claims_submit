@@ -46,8 +46,12 @@ use App\Ids;
 function out(string $msg): void { echo $msg . "\n"; }
 
 // 1) Schema ----------------------------------------------------------------
-$schema = file_get_contents(VLC_ROOT . '/sql/schema.sql');
-Database::pdo()->exec($schema);
+// Split into individual statements (PDO drivers vary on multi-statement exec).
+$schema = (string) file_get_contents(VLC_ROOT . '/sql/schema.sql');
+$schema = preg_replace('/^\s*--.*$/m', '', $schema); // strip line comments
+foreach (array_filter(array_map('trim', explode(';', $schema))) as $stmt) {
+    Database::pdo()->exec($stmt);
+}
 out('✔ Schema applied.');
 
 // 2) Categories ------------------------------------------------------------
@@ -59,7 +63,7 @@ $categories = [
 foreach ($categories as $c) {
     Database::run(
         'INSERT INTO "Category" ("id","name") VALUES (:id,:name)
-         ON CONFLICT ("id") DO UPDATE SET "name" = EXCLUDED."name"',
+         ON DUPLICATE KEY UPDATE "name" = VALUES("name")',
         $c,
     );
 }
@@ -74,7 +78,7 @@ $configEntries = [
 foreach ($configEntries as $entry) {
     Database::run(
         'INSERT INTO "Configuration" ("key","value","updatedAt") VALUES (:key,:value,now())
-         ON CONFLICT ("key") DO UPDATE SET "value" = EXCLUDED."value", "updatedAt" = now()',
+         ON DUPLICATE KEY UPDATE "value" = VALUES("value"), "updatedAt" = now()',
         $entry,
     );
 }

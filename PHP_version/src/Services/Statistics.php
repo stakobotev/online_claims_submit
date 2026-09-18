@@ -15,7 +15,7 @@ final class Statistics
     {
         $total = (int) Database::scalar('SELECT COUNT(*) FROM "Complaint"');
         $forwarded = (int) Database::scalar('SELECT COUNT(*) FROM "Complaint" WHERE "status" IN (\'forwarded\',\'closed\')');
-        $byCategory = Database::all('SELECT "categoryId" AS id, COUNT(*)::int AS count FROM "Complaint" GROUP BY "categoryId" ORDER BY count DESC');
+        $byCategory = Database::all('SELECT "categoryId" AS id, COUNT(*) AS count FROM "Complaint" GROUP BY "categoryId" ORDER BY count DESC');
         $urgent = (int) Database::scalar('SELECT COUNT(*) FROM "Complaint" WHERE "urgent" = TRUE');
         return [
             'totalComplaints' => $total,
@@ -38,15 +38,15 @@ final class Statistics
 
         $base = self::summary();
 
-        $byStatus = Database::all("SELECT c.\"status\", COUNT(*)::int AS count FROM \"Complaint\" c {$clause} GROUP BY c.\"status\"", $params);
+        $byStatus = Database::all("SELECT c.\"status\", COUNT(*) AS count FROM \"Complaint\" c {$clause} GROUP BY c.\"status\"", $params);
         $byMonth = Database::all(
-            "SELECT to_char(date_trunc('month', c.\"createdAt\"), 'YYYY-MM') AS month, COUNT(*)::int AS count
+            "SELECT DATE_FORMAT(c.\"createdAt\", '%Y-%m') AS month, COUNT(*) AS count
                FROM \"Complaint\" c {$clause} GROUP BY 1 ORDER BY 1",
             $params,
         );
-        $bySubmissionType = Database::all("SELECT c.\"submissionType\" AS type, COUNT(*)::int AS count FROM \"Complaint\" c {$clause} GROUP BY c.\"submissionType\"", $params);
+        $bySubmissionType = Database::all("SELECT c.\"submissionType\" AS type, COUNT(*) AS count FROM \"Complaint\" c {$clause} GROUP BY c.\"submissionType\"", $params);
         $byInstitution = Database::all(
-            "SELECT c.\"institutionId\", i.\"name\", COUNT(*)::int AS count
+            "SELECT c.\"institutionId\", i.\"name\", COUNT(*) AS count
                FROM \"Complaint\" c JOIN \"Institution\" i ON i.\"id\" = c.\"institutionId\"
                {$clause} GROUP BY c.\"institutionId\", i.\"name\" ORDER BY count DESC LIMIT 20",
             $params,

@@ -1,13 +1,36 @@
--- Thirstforlife Claims — MySQL / MariaDB schema (PHP edition)
--- Faithful port of the data model. Identifiers use backticks (MySQL default);
--- the application connects with ANSI_QUOTES enabled so its "double-quoted"
--- SQL maps to the same objects. Engine InnoDB, charset utf8mb4.
+-- ===========================================================================
+-- Thirstforlife Claims — PRODUCTION install script (MySQL / MariaDB)
+-- ===========================================================================
+-- Self-contained DDL + required reference seed. Idempotent: safe to re-run
+-- (CREATE TABLE IF NOT EXISTS / INSERT ... ON DUPLICATE KEY / INSERT IGNORE).
+-- Target: MySQL 8.0+ or MariaDB 10.4+. Engine InnoDB, charset utf8mb4.
 --
--- Enum-typed columns use native MySQL ENUM. Booleans are TINYINT(1).
--- Timestamps are DATETIME storing UTC.
+-- HOW TO RUN
+--   1) Create the database + user (see commented block) OR use the one your
+--      host provisioned.
+--   2) Run this file:
+--        mysql -h HOST -u USER -p DBNAME < prod_install.sql
+--   3) Point PHP_version/config/config.php at the same DB.
+--
+-- SECURITY: seeds an admin login with a DEFAULT password. Change it before or
+-- immediately after go-live (see the "Admin user" section at the bottom).
+-- ===========================================================================
+
+-- ---------------------------------------------------------------------------
+-- OPTIONAL: create database + user (run as an admin/root MySQL account).
+-- ---------------------------------------------------------------------------
+-- CREATE DATABASE `thirstforlife` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- CREATE USER 'thirstforlife'@'%' IDENTIFIED BY 'CHANGE_ME_STRONG';
+-- GRANT ALL PRIVILEGES ON `thirstforlife`.* TO 'thirstforlife'@'%';
+-- FLUSH PRIVILEGES;
+-- USE `thirstforlife`;
+-- ---------------------------------------------------------------------------
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- ---------------------------------------------------------------------------
+-- Tables
+-- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `User` (
   `id`               VARCHAR(36)  NOT NULL,
   `email`            VARCHAR(255) NOT NULL,
@@ -230,3 +253,48 @@ CREATE TABLE IF NOT EXISTS `OAuthExchangeCode` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- ---------------------------------------------------------------------------
+-- Required reference seed
+-- ---------------------------------------------------------------------------
+-- Categories referenced by the app (ids are stable keys, do not rename).
+INSERT INTO `Category` (`id`,`name`) VALUES
+  ('hospitals',       'Hospitals'),
+  ('doctors',         'Doctors'),
+  ('insurance_funds', 'Health Insurance Funds')
+ON DUPLICATE KEY UPDATE `name` = VALUES(`name`);
+
+-- Runtime configuration (kept for parity; the app primarily reads config.php).
+INSERT IGNORE INTO `Configuration` (`key`,`value`,`updatedAt`) VALUES
+  ('min_body_length',            '100',                   NOW()),
+  ('captcha_required_anonymous', 'true',                  NOW()),
+  ('ombudsman_email',            'ombudsman@example.org', NOW());
+
+-- ---------------------------------------------------------------------------
+-- Admin user
+-- ---------------------------------------------------------------------------
+-- Password below hashes the DEFAULT password 'ChangeMe!Now1' (Argon2id).
+-- >>> CHANGE THIS before or right after go-live. <<<
+-- Generate your own hash with PHP and replace the value:
+--   php -r "echo password_hash('YOUR_STRONG_PASSWORD', PASSWORD_ARGON2ID,
+--           ['memory_cost'=>19456,'time_cost'=>2,'threads'=>1]);"
+-- and change the email to your real admin address.
+INSERT IGNORE INTO `User`
+  (`id`,`email`,`name`,`passwordHash`,`role`,`status`,`emailVerified`,`createdAt`,`updatedAt`)
+VALUES (
+  UUID(),
+  'admin@thirstforlife.local',
+  'Admin',
+  '$argon2id$v=19$m=19456,t=2,p=1$YU1GazZHUGMvcHRpLy5meQ$cEcY3yLY/PuNQYwcj4QRhDt7ZZTIbcnzupElOtikvdU',
+  'admin',
+  'active',
+  1,
+  NOW(), NOW()
+);
+
+-- ---------------------------------------------------------------------------
+-- OPTIONAL: demo institutions (add your real institutions via the admin panel
+-- instead). Uncomment to insert one example.
+-- ---------------------------------------------------------------------------
+-- INSERT INTO `Institution` (`id`,`categoryId`,`name`,`email`,`active`,`createdAt`,`updatedAt`)
+--   VALUES (UUID(), 'hospitals', 'City Hospital', 'city.hospital@example.org', 1, NOW(), NOW());

@@ -1,8 +1,8 @@
 # Thirstforlife Claims — PHP Edition
 
 A complete rewrite of the Thirstforlife Claims healthcare complaint-management
-platform in **plain PHP (no framework)** with **PDO / PostgreSQL**, intended for
-restricted shared hosting where only PHP is permitted.
+platform in **plain PHP (no framework)** with **PDO / MySQL (MariaDB)**, intended
+for restricted shared hosting where only PHP is permitted.
 
 It is a faithful, feature-for-feature port of the original React + Node/Express
 application (which lives in `../frontend` and `../backend`). Nothing in those
@@ -44,17 +44,18 @@ folders was modified — this is a self-contained parallel implementation.
 | PDFKit / Papaparse                  | Built-in `fputcsv` + a tiny bundled PDF writer |
 | Passport strategies                 | Plain-curl **Google OAuth** (Facebook omitted) |
 
-The PostgreSQL schema keeps the original table/column names (`"User"`,
-`"Complaint"`, `"emailVerified"`, …) so the same database can even be shared with
-the Node app if desired.
+The MySQL schema keeps the original table/column names (`User`, `Complaint`,
+`emailVerified`, …). The app connects with `ANSI_QUOTES` enabled so its
+double-quoted SQL runs unchanged; enum-typed columns use native MySQL `ENUM`,
+booleans are `TINYINT(1)`, and full-text search uses a `FULLTEXT` index.
 
 ---
 
 ## Requirements
 
-- PHP **8.1+** with extensions: `pdo_pgsql`, `curl`, `fileinfo`, `mbstring`,
+- PHP **8.1+** with extensions: `pdo_mysql`, `curl`, `fileinfo`, `mbstring`,
   `openssl`. (Argon2id support is built into PHP 8.)
-- PostgreSQL 13+.
+- MySQL 8.0+ or MariaDB 10.4+.
 - An SMTP server for outgoing mail (MailHog in dev).
 - No Composer packages are required.
 

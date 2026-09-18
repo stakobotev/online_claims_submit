@@ -47,9 +47,8 @@ final class Complaints
                     'institutionId' => $input['institutionId'] ?: null,
                     'freeText' => $input['institutionFreeText'] ?: null,
                     'title' => $input['title'], 'body' => $input['body'],
-                    // PDO binds PHP false as '' which Postgres rejects for bool;
-                    // pass an explicit 'true'/'false' text literal instead.
-                    'urgent' => !empty($input['urgent']) ? 'true' : 'false',
+                    // MySQL boolean is TINYINT(1); bind an explicit 1/0.
+                    'urgent' => !empty($input['urgent']) ? 1 : 0,
                     'contactName' => $input['contactName'] ?: null,
                     'contactEmail' => $input['contactEmail'] ?: null,
                     'status' => $status,
@@ -180,8 +179,8 @@ final class Complaints
             if (!empty($opts['status']))       { $where[] = 'c."status" = :status'; $params['status'] = $opts['status']; }
             if (!empty($opts['from']))         { $where[] = 'c."createdAt" >= :from'; $params['from'] = $opts['from']; }
             if (!empty($opts['to']))           { $where[] = 'c."createdAt" <= :to'; $params['to'] = $opts['to']; }
-            if (isset($opts['urgent']) && $opts['urgent'] !== null) { $where[] = 'c."urgent" = :urgent::boolean'; $params['urgent'] = $opts['urgent'] ? 'true' : 'false'; }
-            if (!empty($opts['q']))            { $where[] = '(c."title" ILIKE :q OR c."body" ILIKE :q)'; $params['q'] = '%' . $opts['q'] . '%'; }
+            if (isset($opts['urgent']) && $opts['urgent'] !== null) { $where[] = 'c."urgent" = :urgent'; $params['urgent'] = $opts['urgent'] ? 1 : 0; }
+            if (!empty($opts['q']))            { $where[] = '(c."title" LIKE :qt OR c."body" LIKE :qb)'; $params['qt'] = $params['qb'] = '%' . $opts['q'] . '%'; }
         }
         $clause = $where ? ('WHERE ' . implode(' AND ', $where)) : '';
         $page = max(1, (int) $opts['page']);

@@ -14,8 +14,8 @@ final class Users
         $where = [];
         $params = [];
         if ($q) {
-            $where[] = '("email" ILIKE :q OR "name" ILIKE :q)';
-            $params['q'] = '%' . $q . '%';
+            $where[] = '("email" LIKE :qe OR "name" LIKE :qn)';
+            $params['qe'] = $params['qn'] = '%' . $q . '%';
         }
         if ($role) {
             $where[] = '"role" = :role';

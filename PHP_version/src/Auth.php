@@ -317,8 +317,8 @@ final class Auth
     private static function linkIdentity(string $userId, string $provider, string $providerUserId): void
     {
         Database::run(
-            'INSERT INTO "OAuthIdentity" ("id","userId","provider","providerUserId","createdAt")
-             VALUES (:id,:uid,:p,:pid,now()) ON CONFLICT ("provider","providerUserId") DO NOTHING',
+            'INSERT IGNORE INTO "OAuthIdentity" ("id","userId","provider","providerUserId","createdAt")
+             VALUES (:id,:uid,:p,:pid,now())',
             ['id' => Ids::uuid(), 'uid' => $userId, 'p' => $provider, 'pid' => $providerUserId],
         );
     }

@@ -31,20 +31,34 @@ final class Ids
         return hash('sha256', $raw);
     }
 
-    /** Atomic UPSERT counter, identical logic to the Node implementation. */
+    /**
+     * Atomic per-year counter -> TFL-YYYY-NNNNNN.
+     * MySQL implementation: ensure the counter row exists, then increment it
+     * inside a single UPDATE using LAST_INSERT_ID() so the new value is read
+     * back atomically per connection (concurrency-safe via InnoDB row locking).
+     */
     public static function generatePublicId(int $year): string
     {
         $key = "complaint_counter_{$year}";
-        $row = Database::one(
+
+        // Ensure the row exists (starting at 0); no-op if it already does.
+        Database::run(
             'INSERT INTO "Configuration" ("key", "value", "updatedAt")
-             VALUES (:k, \'1\', now())
-             ON CONFLICT ("key") DO UPDATE
-               SET "value" = (CAST("Configuration"."value" AS bigint) + 1)::text,
-                   "updatedAt" = now()
-             RETURNING "value"',
+             VALUES (:k, \'0\', now())
+             ON DUPLICATE KEY UPDATE "key" = "key"',
             ['k' => $key],
         );
-        $counter = (int) ($row['value'] ?? 1);
+
+        // Atomically increment and capture the new value via LAST_INSERT_ID().
+        Database::run(
+            'UPDATE "Configuration"
+                SET "value" = LAST_INSERT_ID(CAST("value" AS UNSIGNED) + 1),
+                    "updatedAt" = now()
+              WHERE "key" = :k',
+            ['k' => $key],
+        );
+
+        $counter = (int) Database::scalar('SELECT LAST_INSERT_ID()');
         return sprintf('TFL-%d-%06d', $year, $counter);
     }
 }

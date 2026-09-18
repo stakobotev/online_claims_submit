@@ -21,17 +21,20 @@ final class Database
         }
 
         $host = (string) cfg('DB_HOST', 'localhost');
-        $port = (string) cfg('DB_PORT', '5432');
-        $name = (string) cfg('DB_NAME', 'vallentin');
-        $user = (string) cfg('DB_USER', 'vallentin');
+        $port = (string) cfg('DB_PORT', '3306');
+        $name = (string) cfg('DB_NAME', 'thirstforlife');
+        $user = (string) cfg('DB_USER', 'root');
         $pass = (string) cfg('DB_PASSWORD', '');
 
-        $dsn = "pgsql:host={$host};port={$port};dbname={$name}";
+        $dsn = "mysql:host={$host};port={$port};dbname={$name};charset=utf8mb4";
 
         try {
             $pdo = new PDO($dsn, $user, $pass, [
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                // Native prepares: LIMIT/OFFSET bind as integers correctly.
+                // (A named placeholder must therefore not be reused within one
+                // statement — search filters use distinct :qX placeholders.)
                 PDO::ATTR_EMULATE_PREPARES   => false,
             ]);
         } catch (PDOException $e) {
@@ -44,8 +47,9 @@ final class Database
             exit;
         }
 
-        $schema = (string) cfg('DB_SCHEMA', 'public');
-        $pdo->exec('SET search_path TO ' . $pdo->quote($schema));
+        // Enable ANSI_QUOTES so the app's "double-quoted" identifiers work on
+        // MySQL exactly as they do on PostgreSQL. (Backticks keep working too.)
+        $pdo->exec("SET SESSION sql_mode = CONCAT(@@sql_mode, ',ANSI_QUOTES')");
 
         self::$pdo = $pdo;
         return $pdo;
