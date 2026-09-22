@@ -48,7 +48,11 @@ return [
     'HCAPTCHA_SECRET'     => '0x0000000000000000000000000000000000000000',
     'CAPTCHA_REQUIRED_ANONYMOUS' => true,
 
-    // --- SMTP (synchronous send per request) ---
+    // --- Email delivery (synchronous send per request) ---
+    // 'smtp' talks to an SMTP server (settings below); 'mail' uses PHP's
+    // mail()/sendmail — most reliable on shared cPanel hosts that block
+    // outbound SMTP sockets (no host/port/auth needed).
+    'MAIL_TRANSPORT'      => 'smtp',
     'SMTP_HOST'           => 'localhost',
     'SMTP_PORT'           => 1025,      // MailHog default in dev
     'SMTP_USER'           => '',

@@ -53,7 +53,14 @@ final class Mailer
         );
 
         try {
-            self::deliver($from, $fromEmail, $to, $subject, $html, $text);
+            // Transport: 'smtp' (default) talks to an SMTP server; 'mail' uses
+            // PHP's mail()/sendmail — the most reliable option on shared cPanel
+            // hosting that blocks outbound SMTP sockets.
+            if (strtolower((string) cfg('MAIL_TRANSPORT', 'smtp')) === 'mail') {
+                self::deliverViaMail($from, $fromEmail, $to, $subject, $html, $text);
+            } else {
+                self::deliver($from, $fromEmail, $to, $subject, $html, $text);
+            }
             Database::run(
                 'UPDATE "EmailOutbox" SET "status"=\'sent\', "attempts"="attempts"+1,
                     "lastAttemptAt"=now(), "sentAt"=now() WHERE "id"=:id',
@@ -97,6 +104,36 @@ final class Mailer
         }, $src) ?? $src;
 
         return $src;
+    }
+
+    // ---------------------------------------------------------------------
+    // sendmail transport via PHP mail() — no SMTP socket needed
+    // ---------------------------------------------------------------------
+    private static function deliverViaMail(
+        string $from,
+        string $fromEmail,
+        string $to,
+        string $subject,
+        string $html,
+        string $text,
+    ): void {
+        $boundary = 'vlc-' . bin2hex(random_bytes(8));
+        $headers =
+            'From: ' . $from . "\r\n" .
+            'MIME-Version: 1.0' . "\r\n" .
+            'Content-Type: multipart/alternative; boundary="' . $boundary . '"';
+        $message =
+            '--' . $boundary . "\r\n" .
+            "Content-Type: text/plain; charset=UTF-8\r\n\r\n" . $text . "\r\n" .
+            '--' . $boundary . "\r\n" .
+            "Content-Type: text/html; charset=UTF-8\r\n\r\n" . $html . "\r\n" .
+            '--' . $boundary . "--\r\n";
+
+        // -f sets the envelope sender (helps SPF/deliverability).
+        $ok = @mail($to, self::encodeHeader($subject), $message, $headers, '-f' . $fromEmail);
+        if ($ok === false) {
+            throw new \RuntimeException('mail() transport failed (sendmail returned false)');
+        }
     }
 
     // ---------------------------------------------------------------------

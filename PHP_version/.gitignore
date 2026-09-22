@@ -1,6 +1,10 @@
-# Local configuration with secrets
-/config/config.php
+# Local configuration with secrets — ignore ALL config files except the example.
+/config/*.php
+!/config/config.example.php
 
 # Uploaded attachments
 /storage/uploads/*
 !/storage/uploads/.gitkeep
+
+# Deployment artifacts
+*.zip
