@@ -77,7 +77,7 @@ final class InstitutionsController
         $v = (new Validator())
             ->required('categoryId', $categoryId, t('complaint.selectCategory'))
             ->minLen('name', $name, 2, t('complaint.institution'))
-            ->email('email', $email, t('auth.email'));
+            ->email('email', $email, t('auth.invalidEmail'));
         return [$categoryId, $name, $email, $v->errors()];
     }
 }

@@ -7,6 +7,8 @@
   <p class="muted"><?= e(t('complaint.submitDesc')) ?></p>
 
   <div class="card"><div class="card-body">
+    <?php require VLC_ROOT . '/views/partials/form_errors.php'; ?>
+
     <form method="post" action="<?= e(url('/complaints/submit')) ?>" enctype="multipart/form-data">
       <?= csrf_field() ?>
 
@@ -20,6 +22,7 @@
             </option>
           <?php endforeach; ?>
         </select>
+        <?php if (err($errors,'categoryId')): ?><div class="error"><?= e($errors['categoryId']) ?></div><?php endif; ?>
       </div>
 
       <div class="field">
@@ -42,6 +45,7 @@
         <label for="title"><?= e(t('complaint.title')) ?> <span class="req">*</span></label>
         <input class="input <?= err($errors,'title') ? 'is-invalid' : '' ?>" id="title" name="title" value="<?= e(old('title')) ?>"
                placeholder="<?= e(t('complaint.titlePlaceholder')) ?>" required>
+        <?php if (err($errors,'title')): ?><div class="error"><?= e($errors['title']) ?></div><?php endif; ?>
       </div>
 
       <div class="field">
@@ -65,6 +69,7 @@
         <div class="field" style="margin-bottom:0">
           <label for="contactEmail"><?= e(t('complaint.contactEmail')) ?></label>
           <input class="input <?= err($errors,'contactEmail') ? 'is-invalid' : '' ?>" type="email" id="contactEmail" name="contactEmail" value="<?= e(old('contactEmail')) ?>">
+          <?php if (err($errors,'contactEmail')): ?><div class="error"><?= e($errors['contactEmail']) ?></div><?php endif; ?>
         </div>
       </fieldset>
 

@@ -30,17 +30,14 @@ final class AuthController
         $password = (string) ($_POST['password'] ?? '');
         $from = (string) ($_POST['from'] ?? '');
 
-        $v = (new Validator())
-            ->required('email', $email, t('auth.email'))
-            ->required('password', $password, t('auth.password'));
-        if ($v->fails()) {
-            $this->rerenderLogin($v->errors(), $email, $from);
+        if ($email === '' || $password === '') {
+            $this->rerenderLogin(['_form' => t('auth.invalidCredentials')], $email, $from);
             return;
         }
-
         $result = Auth::attemptLogin($email, $password);
         if (!$result['ok']) {
-            $this->rerenderLogin(['email' => t('auth.invalidCredentials')], $email, $from);
+            // Single, non-revealing message for wrong credentials / lockout.
+            $this->rerenderLogin(['_form' => t('auth.invalidCredentials')], $email, $from);
             return;
         }
 
@@ -77,11 +74,11 @@ final class AuthController
         $marketing = !empty($_POST['marketing']);
 
         $v = (new Validator())
-            ->email('email', $email, t('auth.email'))
-            ->minLen('name', $name, 2, t('auth.name'))
+            ->email('email', $email, t('auth.invalidEmail'))
+            ->minLen('name', $name, 2, t('auth.nameTooShort'))
             ->password('password', $password, t('auth.passwordHint'))
-            ->matches('passwordConfirmation', $password, $confirm, t('auth.passwordConfirmation'))
-            ->truthy('terms', $terms, t('auth.agreeTerms'));
+            ->matches('passwordConfirmation', $password, $confirm, t('auth.passwordMismatch'))
+            ->truthy('terms', $terms, t('auth.termsRequired'));
 
         if (Captcha::enabled() && !Captcha::verify($_POST['h-captcha-response'] ?? null)) {
             $v->add('captcha', t('auth.captchaRequired'));
@@ -139,7 +136,7 @@ final class AuthController
     public function forgot(array $params): void
     {
         $email = (string) ($_POST['email'] ?? '');
-        $v = (new Validator())->email('email', $email, t('auth.email'));
+        $v = (new Validator())->email('email', $email, t('auth.invalidEmail'));
         if (Captcha::enabled() && !Captcha::verify($_POST['h-captcha-response'] ?? null)) {
             $v->add('captcha', t('auth.captchaRequired'));
         }
@@ -167,7 +164,7 @@ final class AuthController
 
         $v = (new Validator())
             ->password('password', $password, t('auth.passwordHint'))
-            ->matches('passwordConfirmation', $password, $confirm, t('auth.passwordConfirmation'));
+            ->matches('passwordConfirmation', $password, $confirm, t('auth.passwordMismatch'));
         if ($v->fails()) {
             view('auth/reset', ['title' => t('auth.resetPassword'), 'token' => $token, 'errors' => $v->errors()], 'app');
             return;

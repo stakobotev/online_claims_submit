@@ -30,7 +30,8 @@
     "notFound": "Page not found.",
     "notFoundDesc": "The page you are looking for does not exist.",
     "unauthorized": "You must be logged in to access this page.",
-    "forbidden": "You do not have permission to access this resource."
+    "forbidden": "You do not have permission to access this resource.",
+    "checkForm": "Please correct the highlighted fields below."
   },
   "auth": {
     "email": "Email",
@@ -39,6 +40,10 @@
     "passwordConfirmation": "Confirm password",
     "newPassword": "New password",
     "passwordHint": "Min 8 chars with uppercase, lowercase, digit and special character",
+    "invalidEmail": "Please enter a valid email address.",
+    "nameTooShort": "Please enter your full name (at least 2 characters).",
+    "passwordMismatch": "Passwords do not match.",
+    "termsRequired": "You must accept the Terms and Privacy Policy.",
     "createAccount": "Create an account",
     "registerAction": "Create account",
     "alreadyHaveAccount": "Already have an account?",
@@ -77,6 +82,7 @@
     "switchToDropdown": "Select from list",
     "switchToFreeText": "Type institution name",
     "title": "Title",
+    "titleTooShort": "Title must be at least 5 characters.",
     "titlePlaceholder": "Brief summary of your complaint",
     "body": "Description",
     "bodyPlaceholder": "Describe your complaint in detail",

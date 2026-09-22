@@ -13,17 +13,18 @@ use App\GoogleOAuth;
       <div class="alert alert-error"><?= e(t('auth.oauthError')) ?></div>
     <?php endif; ?>
 
+    <?php require VLC_ROOT . '/views/partials/form_errors.php'; ?>
+
     <form method="post" action="<?= e(url('/auth/login')) ?>">
       <?= csrf_field() ?>
       <input type="hidden" name="from" value="<?= e($from ?? '') ?>">
       <div class="field">
         <label for="email"><?= e(t('auth.email')) ?></label>
-        <input class="input <?= err($errors,'email') ? 'is-invalid' : '' ?>" type="email" id="email" name="email" value="<?= e(old('email')) ?>" required>
-        <?php if (err($errors,'email')): ?><div class="error"><?= e(t('auth.invalidCredentials')) ?></div><?php endif; ?>
+        <input class="input <?= !empty($errors) ? 'is-invalid' : '' ?>" type="email" id="email" name="email" value="<?= e(old('email')) ?>" required>
       </div>
       <div class="field">
         <label for="password"><?= e(t('auth.password')) ?></label>
-        <input class="input <?= err($errors,'password') ? 'is-invalid' : '' ?>" type="password" id="password" name="password" required>
+        <input class="input <?= !empty($errors) ? 'is-invalid' : '' ?>" type="password" id="password" name="password" required>
       </div>
       <div class="spread">
         <a class="small" href="<?= e(url('/auth/forgot-password')) ?>"><?= e(t('auth.forgotPassword')) ?></a>

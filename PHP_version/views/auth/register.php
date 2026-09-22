@@ -6,6 +6,8 @@ use App\GoogleOAuth;
   <div class="card"><div class="card-body">
     <h1><?= e(t('auth.createAccount')) ?></h1>
 
+    <?php require VLC_ROOT . '/views/partials/form_errors.php'; ?>
+
     <form method="post" action="<?= e(url('/auth/register')) ?>">
       <?= csrf_field() ?>
       <div class="field">
@@ -16,15 +18,21 @@ use App\GoogleOAuth;
       <div class="field">
         <label for="name"><?= e(t('auth.name')) ?> <span class="req">*</span></label>
         <input class="input <?= err($errors,'name') ? 'is-invalid' : '' ?>" id="name" name="name" value="<?= e(old('name')) ?>" required>
+        <?php if (err($errors,'name')): ?><div class="error"><?= e($errors['name']) ?></div><?php endif; ?>
       </div>
       <div class="field">
         <label for="password"><?= e(t('auth.password')) ?> <span class="req">*</span></label>
         <input class="input <?= err($errors,'password') ? 'is-invalid' : '' ?>" type="password" id="password" name="password" required>
-        <div class="hint"><?= e(t('auth.passwordHint')) ?></div>
+        <?php if (err($errors,'password')): ?>
+          <div class="error"><?= e($errors['password']) ?></div>
+        <?php else: ?>
+          <div class="hint"><?= e(t('auth.passwordHint')) ?></div>
+        <?php endif; ?>
       </div>
       <div class="field">
         <label for="passwordConfirmation"><?= e(t('auth.passwordConfirmation')) ?> <span class="req">*</span></label>
         <input class="input <?= err($errors,'passwordConfirmation') ? 'is-invalid' : '' ?>" type="password" id="passwordConfirmation" name="passwordConfirmation" required>
+        <?php if (err($errors,'passwordConfirmation')): ?><div class="error"><?= e($errors['passwordConfirmation']) ?></div><?php endif; ?>
       </div>
 
       <div class="field">

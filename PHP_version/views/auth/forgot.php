@@ -7,11 +7,13 @@
       <a class="btn btn-secondary" href="<?= e(url('/auth/login')) ?>"><?= e(t('nav.login')) ?></a>
     <?php else: ?>
       <p class="muted"><?= e(t('auth.forgotDesc')) ?></p>
+      <?php require VLC_ROOT . '/views/partials/form_errors.php'; ?>
       <form method="post" action="<?= e(url('/auth/forgot-password')) ?>">
         <?= csrf_field() ?>
         <div class="field">
           <label for="email"><?= e(t('auth.email')) ?></label>
           <input class="input <?= err($errors,'email') ? 'is-invalid' : '' ?>" type="email" id="email" name="email" value="<?= e(old('email')) ?>" required>
+          <?php if (err($errors,'email')): ?><div class="error"><?= e($errors['email']) ?></div><?php endif; ?>
         </div>
         <?php require VLC_ROOT . '/views/partials/captcha.php'; ?>
         <button class="btn btn-primary btn-block" type="submit"><?= e(t('auth.sendResetLink')) ?></button>

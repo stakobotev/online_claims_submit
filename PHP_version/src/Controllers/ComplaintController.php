@@ -44,7 +44,7 @@ final class ComplaintController
 
         $v = (new Validator())
             ->required('categoryId', $input['categoryId'], t('complaint.selectCategory'))
-            ->minLen('title', $input['title'], 5, t('complaint.title'))
+            ->minLen('title', $input['title'], 5, t('complaint.titleTooShort'))
             ->minLen('body', $input['body'], $minBody, t('complaint.bodyHint', ['min' => $minBody]));
 
         if ($input['institutionId'] === '' && $input['institutionFreeText'] === '') {
@@ -54,7 +54,7 @@ final class ComplaintController
             $v->add('institution', t('complaint.selectInstitution'));
         }
         if ($input['contactEmail'] !== '' && !filter_var($input['contactEmail'], FILTER_VALIDATE_EMAIL)) {
-            $v->add('contactEmail', t('auth.email'));
+            $v->add('contactEmail', t('auth.invalidEmail'));
         }
 
         // Anonymous submissions require captcha (when configured).
