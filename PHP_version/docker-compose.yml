@@ -1,0 +1,61 @@
+# Local DEV environment for the PHP edition: MySQL 8 + MailHog + the PHP app.
+# Everything is wired together; the app's config is overridden via env vars
+# (cfg() reads OS env first), so you only need a config/config.php to exist.
+#
+#   docker compose up -d --build
+#   docker compose exec app php sql/setup.php     # create schema + seed + admin
+#   open http://localhost:8080  (app)  /  http://localhost:8025  (MailHog inbox)
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: thirstforlife
+      MYSQL_USER: thirstforlife
+      MYSQL_PASSWORD: thirstforlife
+    ports:
+      - "3307:3306"          # host 3307 -> container 3306 (avoids clashing with a local MySQL)
+    volumes:
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"          # SMTP
+      - "8025:8025"          # web UI
+
+  app:
+    build: .                 # uses PHP_version/Dockerfile (php:8.3-cli + pdo_mysql)
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_ENV: development
+      PUBLIC_BASE_URL: http://localhost:8080
+      # DB — reach the db service by name on the compose network
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: thirstforlife
+      DB_USER: thirstforlife
+      DB_PASSWORD: thirstforlife
+      # Email — synchronous SMTP to MailHog
+      MAIL_TRANSPORT: smtp
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+      # Seed an admin on setup (used by sql/setup.php)
+      ADMIN_EMAIL: admin@thirstforlife.local
+      ADMIN_INITIAL_PASSWORD: ChangeMe!Now1
+      SEED_DEMO_DATA: "true"
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app               # live code reload — edits reflect immediately
+
+volumes:
+  dbdata:
