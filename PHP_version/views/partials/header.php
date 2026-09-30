@@ -1,7 +1,13 @@
 <?php $u = current_user(); $otherLang = locale() === 'bg' ? 'en' : 'bg'; ?>
 <header class="site-header">
   <div class="container">
-    <a class="brand" href="<?= e(url('/')) ?>"><?= e(t('app.name')) ?></a>
+    <a class="brand" href="<?= e(url('/')) ?>" aria-label="<?= e(t('nav.home')) ?>">
+      <span class="brand-badge"><?= locale() === 'bg' ? 'ЖЖ' : 'TFL' ?></span>
+      <span class="brand-text">
+        <strong><?= e(t('app.name')) ?></strong>
+        <span><?= e(t('brand.subtitle')) ?></span>
+      </span>
+    </a>
     <nav class="nav">
       <a href="<?= e(url('/')) ?>"><?= e(t('nav.home')) ?></a>
       <a href="<?= e(url('/complaints/submit')) ?>"><?= e(t('nav.submit')) ?></a>

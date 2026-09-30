@@ -1,68 +1,87 @@
-<?php
-/** @var array $stats @var array $categories */
-$catMap = $categories;
-?>
+<?php /* Landing page — faithful port of the approved "Жажда за живот" mockup. */ ?>
+
+<!-- Hero: report intro + track card -->
 <section class="hero">
-  <div class="container">
-    <h1><?= e(t('home.hero.title')) ?></h1>
-    <p><?= e(t('home.hero.subtitle')) ?></p>
-    <div class="row mt">
-      <a class="btn btn-primary" href="<?= e(url('/complaints/submit')) ?>"><?= e(t('home.cta.submit')) ?></a>
-      <?php if (!current_user()): ?>
-        <a class="btn btn-secondary" href="<?= e(url('/auth/register')) ?>"><?= e(t('nav.register')) ?></a>
-      <?php else: ?>
-        <a class="btn btn-secondary" href="<?= e(url('/complaints')) ?>"><?= e(t('nav.myComplaints')) ?></a>
-      <?php endif; ?>
+  <div class="container lp-hero-grid">
+    <div>
+      <h1><?= e(t('home.hero.title')) ?></h1>
+      <p class="lp-lead"><?= e(t('home.hero.lead')) ?></p>
+      <div class="row">
+        <a class="btn btn-primary" href="<?= e(url('/complaints/submit')) ?>">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          <?= e(t('home.cta.submit')) ?>
+        </a>
+        <a class="btn btn-secondary" href="#works">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <?= e(t('home.cta.how')) ?>
+        </a>
+      </div>
+    </div>
+
+    <div class="card lp-hero-card" id="track">
+      <div class="card-body">
+        <h2><?= e(t('home.track.title')) ?></h2>
+        <p class="muted small"><?= e(t('home.track.desc')) ?></p>
+        <form method="get" action="<?= e(url('/track')) ?>" class="lp-field-row">
+          <input class="input" name="publicId" placeholder="<?= e(t('home.track.placeholder')) ?>" aria-label="<?= e(t('home.track.title')) ?>">
+          <button class="btn btn-accent" type="submit"><?= e(t('home.track.action')) ?></button>
+        </form>
+        <div class="lp-note"><?= e(t('home.track.note')) ?></div>
+      </div>
     </div>
   </div>
 </section>
 
-<div class="container mt2">
-  <!-- Track box -->
-  <div class="card mb">
-    <div class="card-body">
-      <form method="get" action="<?= e(url('/track')) ?>" class="spread">
-        <div class="field" style="flex:1;margin:0;min-width:240px">
-          <label for="publicId"><?= e(t('home.track.label')) ?></label>
-          <input class="input" id="publicId" name="publicId" placeholder="<?= e(t('home.track.placeholder')) ?>">
-        </div>
-        <button class="btn btn-primary" type="submit"><?= e(t('home.track.action')) ?></button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Stats -->
-  <h2 class="mt2"><?= e(t('home.stats.title')) ?></h2>
-  <div class="stats-grid mb">
-    <div class="stat"><div class="num"><?= (int) $stats['totalComplaints'] ?></div><div class="label"><?= e(t('stats.totalComplaints')) ?></div></div>
-    <div class="stat"><div class="num"><?= (int) $stats['totalForwarded'] ?></div><div class="label"><?= e(t('stats.forwarded')) ?></div></div>
-    <div class="stat"><div class="num"><?= (int) $stats['byUrgency']['urgent'] ?></div><div class="label"><?= e(t('stats.urgent')) ?></div></div>
-    <div class="stat"><div class="num"><?= (int) $stats['byUrgency']['normal'] ?></div><div class="label"><?= e(t('stats.normal')) ?></div></div>
-  </div>
-
-  <?php if (!empty($stats['byCategory'])): ?>
-    <div class="card mb"><div class="card-body">
-      <h3><?= e(t('stats.byCategory')) ?></h3>
-      <?php
-        $max = max(array_map(static fn ($r) => (int) $r['count'], $stats['byCategory'])) ?: 1;
-        foreach ($stats['byCategory'] as $row):
-          $label = $catMap[$row['id']] ?? $row['id'];
-          $pct = (int) round(((int) $row['count'] / $max) * 100);
-      ?>
-        <div class="bar-row">
-          <span class="bar-label"><?= e($label) ?></span>
-          <span class="bar-track"><span class="bar-fill" style="width:<?= $pct ?>%"></span></span>
-          <span class="bar-val"><?= (int) $row['count'] ?></span>
-        </div>
-      <?php endforeach; ?>
-    </div></div>
-  <?php endif; ?>
-
-  <!-- How it works -->
-  <h2 class="mt2"><?= e(t('home.howItWorks.title')) ?></h2>
-  <div class="steps mb">
-    <div class="step"><div class="n">1</div><h3><?= e(t('home.step1.title')) ?></h3><p class="muted"><?= e(t('home.step1.desc')) ?></p></div>
-    <div class="step"><div class="n">2</div><h3><?= e(t('home.step2.title')) ?></h3><p class="muted"><?= e(t('home.step2.desc')) ?></p></div>
-    <div class="step"><div class="n">3</div><h3><?= e(t('home.step3.title')) ?></h3><p class="muted"><?= e(t('home.step3.desc')) ?></p></div>
+<!-- 112 emergency warning -->
+<div class="container">
+  <div class="lp-warning">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+    <div><strong><?= e(t('home.emergency.title')) ?></strong><br><?= e(t('home.emergency.body')) ?></div>
   </div>
 </div>
+
+<!-- How it works: 5 steps -->
+<section class="lp-section" id="works">
+  <div class="container">
+    <h2><?= e(t('home.howItWorks.title')) ?></h2>
+    <p class="muted lp-intro"><?= e(t('home.howItWorks.intro')) ?></p>
+    <div class="lp-steps">
+      <?php for ($i = 1; $i <= 5; $i++): ?>
+        <article class="step">
+          <div class="n"><?= $i ?></div>
+          <h3><?= e(t("home.step{$i}.title")) ?></h3>
+          <p class="muted small"><?= e(t("home.step{$i}.desc")) ?></p>
+        </article>
+      <?php endfor; ?>
+    </div>
+  </div>
+</section>
+
+<!-- Help band -->
+<div class="container">
+  <section class="lp-help">
+    <div>
+      <h2><?= e(t('home.help.title')) ?></h2>
+      <p><?= e(t('home.help.body')) ?></p>
+    </div>
+    <a class="btn" href="<?= e(url('/about')) ?>">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.98.36 1.94.7 2.86a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.22-1.27a2 2 0 0 1 2.11-.45c.92.34 1.88.57 2.86.7A2 2 0 0 1 22 16.92Z"/></svg>
+      <?= e(t('home.help.action')) ?>
+    </a>
+  </section>
+</div>
+
+<!-- Funding / partners strip -->
+<section class="lp-funding">
+  <div class="container lp-funding-grid">
+    <div class="lp-project">
+      <strong><?= e(t('home.funding.title')) ?></strong>
+      <?= e(t('home.funding.text')) ?>
+    </div>
+    <div class="lp-logo-row" aria-label="<?= e(t('home.funding.title')) ?>">
+      <div class="lp-partner-logo">ЛОГО<br>„Жажда за живот“</div>
+      <div class="lp-partner-logo">ОФИЦИАЛНО ЛОГО<br>Швейцарско-българска програма</div>
+      <div class="lp-partner-logo">ЛОГО<br>Програмен оператор</div>
+    </div>
+  </div>
+</section>

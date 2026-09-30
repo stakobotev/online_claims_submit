@@ -1,9 +1,6 @@
 <footer class="site-footer">
   <div class="container">
-    <div>
-      <strong><?= e(t('app.name')) ?></strong>
-      <div class="small muted">&copy; <?= date('Y') ?></div>
-    </div>
+    <span>&copy; <?= date('Y') ?> <?= e(t('footer.org')) ?></span>
     <nav class="nav">
       <a href="<?= e(url('/about')) ?>"><?= e(t('nav.about')) ?></a>
       <a href="<?= e(url('/privacy')) ?>"><?= e(t('nav.privacy')) ?></a>

@@ -3,6 +3,12 @@
     "name": "Thirstforlife Claims",
     "tagline": "Healthcare complaint management platform"
   },
+  "footer": {
+    "org": "“Thirst for Life” Association"
+  },
+  "brand": {
+    "subtitle": "Signals in healthcare"
+  },
   "nav": {
     "home": "Home",
     "about": "About",
@@ -125,34 +131,41 @@
   },
   "home": {
     "hero": {
-      "title": "Healthcare Complaint Platform",
-      "subtitle": "Submit complaints against hospitals, doctors, and health insurance funds. Your complaint is forwarded to the relevant institution and the Ombudsman."
+      "title": "Struggling to access the healthcare you need?",
+      "lead": "Report denied treatment, a problem with a doctor or hospital, missing medicines, tests, referrals, or violations of your health-insurance rights."
     },
     "cta": {
-      "submit": "Submit a complaint"
+      "submit": "Submit a report",
+      "how": "How the platform works"
     },
     "track": {
-      "placeholder": "Track complaint: TFL-2026-000123",
-      "label": "Complaint ID",
-      "action": "Track"
+      "title": "Track a submitted report",
+      "desc": "Enter the individual number you received after submitting.",
+      "placeholder": "TFL-2026-000123",
+      "action": "Track",
+      "note": "Keep your number — for anonymous reports it is the only way to track the case."
     },
-    "stats": {
-      "title": "Platform overview"
+    "emergency": {
+      "title": "In case of immediate danger to life or health",
+      "body": "Call 112 or go to the nearest emergency department. This platform is not an emergency medical service."
     },
     "howItWorks": {
-      "title": "How it works"
+      "title": "How it works",
+      "intro": "A clear process from submitting your report to being informed about the possible next steps."
     },
-    "step1": {
-      "title": "Submit",
-      "desc": "Fill in the complaint form with details about the healthcare provider."
+    "step1": { "title": "Submit a report", "desc": "Describe the problem and attach documents if you have any." },
+    "step2": { "title": "Get a number", "desc": "You receive an individual number to track your case." },
+    "step3": { "title": "We review", "desc": "The team checks the information and may request additions." },
+    "step4": { "title": "We agree on actions", "desc": "We discuss the appropriate next steps with you." },
+    "step5": { "title": "You track", "desc": "Follow progress via your number or your profile." },
+    "help": {
+      "title": "Need help filling it in?",
+      "body": "The team of the “Thirst for Life” Association can assist you by phone, email or in person.",
+      "action": "Help and contacts"
     },
-    "step2": {
-      "title": "Review",
-      "desc": "Anonymous complaints are reviewed by an administrator before forwarding."
-    },
-    "step3": {
-      "title": "Forward",
-      "desc": "Your complaint is sent to the institution and a copy to the Ombudsman."
+    "funding": {
+      "title": "The platform was developed under the project",
+      "text": "“Social accountability in healthcare for vulnerable communities in the small settlements of Sliven region”, implemented by the “Thirst for Life” Association with the financial support of the Bulgarian-Swiss Cooperation Programme."
     }
   },
   "about": {
