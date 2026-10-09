@@ -79,9 +79,18 @@
       <?= e(t('home.funding.text')) ?>
     </div>
     <div class="lp-logo-row" aria-label="<?= e(t('home.funding.title')) ?>">
-      <div class="lp-partner-logo">ЛОГО<br>„Жажда за живот“</div>
-      <div class="lp-partner-logo">ОФИЦИАЛНО ЛОГО<br>Швейцарско-българска програма</div>
-      <div class="lp-partner-logo">ЛОГО<br>Програмен оператор</div>
+      <div class="lp-partner-logo">
+        <img src="<?= e(url('/assets/img/tfl_logo.jpg')) ?>" alt="Жажда за живот — Thirst for Life">
+      </div>
+      <div class="lp-partner-logo">
+        <img src="<?= e(url('/assets/img/logo_p2_0.png')) ?>" alt="Швейцарско-българска програма за сътрудничество">
+      </div>
+      <div class="lp-partner-logo">
+        <img src="<?= e(url('/assets/img/logo_p2_1.png')) ?>" alt="Swiss-Bulgarian Cooperation Programme">
+      </div>
     </div>
+  </div>
+  <div class="container">
+    <p class="lp-disclaimer"><?= e(t('home.funding.disclaimer')) ?></p>
   </div>
 </section>

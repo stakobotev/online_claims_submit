@@ -2,9 +2,8 @@
 <header class="site-header">
   <div class="container">
     <a class="brand" href="<?= e(url('/')) ?>" aria-label="<?= e(t('nav.home')) ?>">
-      <span class="brand-badge"><?= locale() === 'bg' ? 'ЖЖ' : 'TFL' ?></span>
+      <img class="brand-logo" src="<?= e(url('/assets/img/tfl_logo.jpg')) ?>" alt="Жажда за живот — Thirst for Life">
       <span class="brand-text">
-        <strong><?= e(t('app.name')) ?></strong>
         <span><?= e(t('brand.subtitle')) ?></span>
       </span>
     </a>

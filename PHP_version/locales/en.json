@@ -165,7 +165,8 @@
     },
     "funding": {
       "title": "The platform was developed under the project",
-      "text": "“Social accountability in healthcare for vulnerable communities in the small settlements of Sliven region”, implemented by the “Thirst for Life” Association with the financial support of the Bulgarian-Swiss Cooperation Programme."
+      "text": "“Social accountability in healthcare for vulnerable communities in the small settlements of Sliven region”, implemented by the “Thirst for Life” Association with the financial support of the Bulgarian-Swiss Cooperation Programme.",
+      "disclaimer": "Prepared with the support of the Bulgarian-Swiss Cooperation Programme, Civic Engagement and Transparency Mechanism (CETM) 2024-2029. The views and opinions expressed are solely those of the author(s) and do not necessarily reflect those of the governments of Switzerland and Bulgaria."
     }
   },
   "about": {
@@ -198,23 +199,55 @@
   },
   "terms": {
     "title": "Terms of Use",
-    "section1": {
-      "title": "Acceptable use",
-      "body": "You may use this platform to submit genuine complaints related to healthcare services. You must not submit false, abusive, or spam content."
-    },
-    "section2": {
-      "title": "Account responsibility",
-      "body": "You are responsible for maintaining the confidentiality of your account credentials. Notify us immediately of any unauthorized access."
-    },
-    "section3": {
-      "title": "Disclaimer",
-      "body": "This platform facilitates routing of complaints. We do not guarantee any particular outcome. Institutional responses depend on the respective institution."
-    },
-    "section4": {
-      "title": "Modification",
-      "body": "We may update these terms at any time. Continued use after an update constitutes acceptance of the new terms."
-    },
-    "version": "Version 1.0 — May 2026"
+    "sections": [
+      {
+        "title": "General provisions",
+        "body": ["These Terms of Use govern the rules for using this website (the “Site”). Accessing and using the Site means that you accept these terms. If you do not agree, please stop using the Site."]
+      },
+      {
+        "title": "Definitions",
+        "list": [
+          "“User” – any person who visits or uses the Site.",
+          "“Services” – all functionalities, information, resources and materials provided through the Site.",
+          "“Administrator” – the owner or operator of the Site."
+        ]
+      },
+      {
+        "title": "Use of the Site",
+        "body": ["The User undertakes:"],
+        "list": [
+          "to use the Site in good faith;",
+          "not to violate the legislation of the Republic of Bulgaria;",
+          "not to perform actions that may disrupt the operation or security of the Site."
+        ]
+      },
+      {
+        "title": "Intellectual property",
+        "body": ["All content on the Site (texts, images, graphics, logos, design) is protected by copyright. Copying, distribution or use is not permitted without the Administrator’s express written consent."]
+      },
+      {
+        "title": "Limitation of liability",
+        "body": ["The Administrator is not liable for:"],
+        "list": [
+          "any technical problems;",
+          "losses or damages arising from the use of the Site;",
+          "the content of external sites to which there are links."
+        ]
+      },
+      {
+        "title": "Privacy and personal data",
+        "body": ["Personal data is processed in accordance with the Privacy Policy. The User consents to the processing of data when using the Site."]
+      },
+      {
+        "title": "Changes to the terms",
+        "body": ["The Administrator has the right to change these Terms of Use at any time. Changes take effect from the moment of their publication."]
+      },
+      {
+        "title": "Applicable law",
+        "body": ["For all matters not settled in these Terms of Use, the applicable legislation of the Republic of Bulgaria applies."]
+      }
+    ],
+    "version": "Version 1.0 — October 2026"
   },
   "track": {
     "title": "Track a complaint",

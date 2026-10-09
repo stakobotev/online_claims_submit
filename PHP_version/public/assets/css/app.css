@@ -89,15 +89,10 @@ h3 { font-size: 1.08rem; margin: 0 0 .5rem; }
 }
 .site-header .container { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: 74px; }
 .brand { display: flex; align-items: center; gap: 12px; color: var(--ink); }
-.brand-badge {
-  width: 46px; height: 46px; flex: none; border-radius: 50%;
-  display: grid; place-items: center;
-  background: var(--wine); color: var(--on-wine);
-  font-weight: 600; letter-spacing: -1px; font-size: 1rem;
-}
-.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.brand-logo { height: 56px; width: auto; flex: none; display: block; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.2; }
 .brand-text strong { font-size: 1rem; font-weight: 600; }
-.brand-text span { color: var(--ink-muted); font-size: .8rem; }
+.brand-text span { color: var(--ink-muted); font-size: .82rem; }
 .nav { display: flex; align-items: center; gap: 1.3rem; flex-wrap: wrap; }
 .nav a { color: var(--gray-700); font-weight: 500; }
 .nav a:hover { color: var(--wine); text-decoration: none; }
@@ -260,7 +255,9 @@ details.modal > summary::-webkit-details-marker { display:none; }
 .lp-project { color: var(--ink-muted); font-size: .82rem; line-height: 1.55; }
 .lp-project strong { color: var(--ink); display: block; margin-bottom: 5px; font-size: .9rem; }
 .lp-logo-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.lp-partner-logo { min-height: 58px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink-muted); display: grid; place-items: center; padding: 8px; text-align: center; font-size: .68rem; line-height: 1.35; }
+.lp-partner-logo { min-height: 72px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink-muted); display: grid; place-items: center; padding: 12px; text-align: center; font-size: .68rem; line-height: 1.35; }
+.lp-partner-logo img { max-width: 100%; max-height: 52px; width: auto; height: auto; object-fit: contain; }
+.lp-disclaimer { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line); color: var(--ink-muted); font-size: .76rem; line-height: 1.55; }
 
 @media (max-width: 900px) {
   .lp-hero-grid { grid-template-columns: 1fr; gap: 32px; }

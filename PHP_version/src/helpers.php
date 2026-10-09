@@ -33,6 +33,12 @@ function locale(): string
     return \App\I18n::locale();
 }
 
+/** Fetch a raw (possibly array) translation node — for structured content. */
+function t_raw(string $key): mixed
+{
+    return \App\I18n::raw($key);
+}
+
 /** Issue a redirect and stop. */
 function redirect(string $path): never
 {

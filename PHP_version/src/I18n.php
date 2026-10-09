@@ -68,6 +68,15 @@ final class I18n
     }
 
     /**
+     * Return the raw resolved node for a key — may be an array (e.g. a list of
+     * sections) or a string. Used for structured content like legal pages.
+     */
+    public static function raw(string $key): mixed
+    {
+        return self::resolve(self::$messages, explode('.', $key));
+    }
+
+    /**
      * Resolve nested keys while tolerating flat keys that themselves contain
      * dots (e.g. "submitted.title" living beside "submitted"). At each node we
      * first try the full remaining path as a literal key, then descend.
