@@ -86,4 +86,48 @@
       <button class="btn btn-primary btn-block" type="submit"><?= e(t('actions.submit')) ?></button>
     </form>
   </div></div>
+
+  <script>
+  (function () {
+    var cat  = document.getElementById('categoryId');
+    var inst = document.getElementById('institutionId');
+    if (!cat || !inst) return;
+
+    // Keep the empty placeholder, snapshot the real institution options.
+    var placeholder = inst.querySelector('option[value=""]');
+    var all = Array.prototype.slice.call(inst.querySelectorAll('option'))
+      .filter(function (o) { return o.value !== ''; })
+      .map(function (o) {
+        return {
+          value:    o.value,
+          label:    o.textContent.trim(),
+          category: o.getAttribute('data-category') || ''
+        };
+      });
+    var preselected = inst.value; // honour old() after a validation error
+
+    function render() {
+      var selectedCat = cat.value;
+      var keep = inst.value;
+      inst.innerHTML = '';
+      if (placeholder) inst.appendChild(placeholder);
+      var matched = false;
+      all.forEach(function (o) {
+        // No category chosen -> show all; otherwise only matching ones.
+        if (selectedCat && o.category !== selectedCat) return;
+        var opt = document.createElement('option');
+        opt.value = o.value;
+        opt.textContent = o.label;
+        opt.setAttribute('data-category', o.category);
+        if (o.value === keep) { opt.selected = true; matched = true; }
+        inst.appendChild(opt);
+      });
+      if (!matched) inst.value = ''; // reset if the old pick is now hidden
+    }
+
+    cat.addEventListener('change', render);
+    inst.value = preselected;
+    render();
+  })();
+  </script>
 </div>
